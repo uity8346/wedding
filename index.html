@@ -5,836 +5,667 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>婚禮禮金管理系統</title>
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
-:root{--green:#29483d;--bg:#f4f6f3;--line:#d9e1da;--red:#a52c27}
+:root {
+  --pink:#b76e79;
+  --pink-light:#fff0f2;
+  --ink:#3d3435;
+  --muted:#766b6c;
+  --border:#eadfe1;
+  --green:#176437;
+  --red:#a40000;
+}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:#24342c;font-family:system-ui,"Noto Sans TC",sans-serif}
-header{background:var(--green);color:white;padding:22px}
-header h1{font-size:23px;margin:0 0 6px}
-main{max-width:1100px;margin:auto;padding:18px}
-.panel{background:white;border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:16px}
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC",
+  "Microsoft JhengHei",sans-serif;
+  color:var(--ink);
+  background:#fffafb;
+  line-height:1.6
+}
+header{
+  background:linear-gradient(135deg,#b76e79,#d49aa1);
+  color:white;padding:24px 16px;text-align:center
+}
+header h1{margin:0 0 6px;font-size:25px}
+header p{margin:0;font-size:14px}
+main{max-width:1050px;margin:auto;padding:16px}
+.card{
+  background:white;border:1px solid var(--border);
+  border-radius:14px;padding:18px;margin-bottom:16px;
+  box-shadow:0 3px 12px #7c45500b
+}
 h2{font-size:19px;margin:0 0 14px}
-label{display:block;font-size:14px;margin:12px 0 5px}
-input,select,textarea{width:100%;padding:11px;border:1px solid #cbd5cd;border-radius:8px;font:inherit;background:white}
-button{border:0;border-radius:8px;padding:11px 14px;background:var(--green);color:white;font:inherit;cursor:pointer}
-button:disabled{opacity:.45;cursor:not-allowed}
-button.secondary{background:#e7ece7;color:var(--green)}
-button.danger{background:#a52c27}
-.row{display:flex;gap:10px;flex-wrap:wrap;align-items:end}
-.row>div{flex:1;min-width:160px}
-.nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+h3{font-size:16px;margin:14px 0 8px}
+.muted{color:var(--muted);font-size:13px}
+.status{padding:10px 12px;border-radius:9px;margin:10px 0}
+.status.info{background:#f3f4f7}
+.status.ok{background:#eaf7ef;color:#256943}
+.status.error{background:#fff0f0;color:#a52e2e}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:12px
+}
+.stat{background:var(--pink-light);border-radius:12px;padding:15px}
+.stat strong{display:block;font-size:24px;color:var(--pink)}
+.stat span{font-size:13px}
+label{display:block;font-size:14px;margin:10px 0 5px}
+input,select,textarea{
+  width:100%;border:1px solid #d9cdcf;border-radius:9px;
+  padding:11px;background:white;color:var(--ink);font:inherit
+}
+textarea{min-height:70px;resize:vertical}
+button{
+  border:0;border-radius:9px;padding:10px 14px;
+  background:var(--pink);color:white;cursor:pointer;
+  font:inherit;margin:4px 4px 4px 0
+}
+button.secondary{background:#f2e7e9;color:#71464d}
+button.danger{background:#a94444}
+button:disabled{opacity:.5;cursor:not-allowed}
+.nav{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.nav button{flex:1;min-width:100px}
+.nav button.active{background:#75414b}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.row>*{flex:1;min-width:140px}
+.row button{flex:0 0 auto}
 .hidden{display:none!important}
-.muted{font-size:13px;color:#68766d}
-.alert{background:#fff0ce;border:1px solid #e8c76f;border-radius:9px;padding:12px;margin:12px 0;color:#704e13;white-space:pre-line}
-.error{background:#ffebeb;border:1px solid #e6a5a5;border-radius:9px;padding:12px;margin:12px 0;color:#8b1d1d;white-space:pre-line}
-.good{background:#e5f4e8;border-radius:9px;padding:12px;margin:12px 0;white-space:pre-line}
-.area{background:#e8efe9;border-radius:10px;padding:15px;margin-bottom:14px}
-.area strong{font-size:23px;display:block;margin-top:4px}
-.gift{border-radius:10px;padding:14px;margin:12px 0;font-weight:700;font-size:18px}
-.gift.yes{background:#e4f5e7;color:#176333;border:2px solid #70bd83}
-.gift.no{background:#edf0f3;color:#39434b;border:2px solid #c7ced4}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
-.stat{background:#edf1ed;padding:15px;border-radius:10px}
-.stat strong{display:block;font-size:24px;margin-top:5px}
+.table-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:14px}
-th,td{padding:10px 8px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
-th{background:#edf1ed}
-.table-wrap{overflow:auto;margin-top:12px}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
-#login{max-width:520px;margin:35px auto}
+th,td{
+  padding:10px 8px;border-bottom:1px solid var(--border);
+  text-align:left
+}
+th{background:#fff6f7;white-space:nowrap}
+.tag{
+  display:inline-block;padding:2px 8px;border-radius:99px;
+  background:#f5e8ea;font-size:12px
+}
+.money{color:var(--pink);font-weight:bold}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
+
+/* 喜餅需求醒目提醒 */
+.cake-alert{
+  margin:16px 0;padding:20px 14px;
+  border:3px solid #d62828;border-radius:14px;
+  background:#fff0f0;color:#a40000;
+  font-size:25px;font-weight:900;text-align:center;
+  box-shadow:0 0 0 4px #d628281c;
+  animation:cake-pulse 1.2s ease-in-out infinite alternate
+}
+.cake-alert small{
+  display:block;margin-top:7px;font-size:15px;font-weight:700
+}
+.cake-no{
+  margin:14px 0;padding:15px;
+  border:2px solid #27824b;border-radius:12px;
+  background:#edfff3;color:#176437;
+  font-size:19px;font-weight:800;text-align:center
+}
+.cake-confirm{
+  margin:14px 0;padding:12px;border:2px solid #d62828;
+  background:#fff8f8;border-radius:10px
+}
+@keyframes cake-pulse{
+  from{transform:scale(1)}
+  to{transform:scale(1.015)}
+}
+@media(prefers-reduced-motion:reduce){
+  .cake-alert{animation:none}
+}
+@media(max-width:600px){
+  main{padding:10px}
+  .card{padding:14px}
+  header h1{font-size:21px}
+  .cake-alert{font-size:22px}
+}
 </style>
 </head>
 <body>
 <header>
-  <h1>囍・婚禮禮金管理系統</h1>
-  <div>賓客名單｜禮金登記｜喜餅追蹤｜Excel 報表｜Google 試算表寫入</div>
+  <h1>💐 婚禮禮金管理系統</h1>
+  <p>Google 試算表名單同步｜醒目喜餅提醒</p>
 </header>
 
 <main>
-<section id="login" class="panel">
-  <h2>請先選擇收禮區</h2>
-  <p>進入後會固定使用該收禮區，直到你主動切換。</p>
-  <label>收禮區</label>
-  <select id="initialArea">
-    <option value="">請選擇</option>
+<section class="card" id="loginPanel">
+  <h2>選擇收禮區</h2>
+  <p class="muted">請依照目前負責的收禮區進入，系統會檢查賓客分類。</p>
+  <label for="areaSelect">收禮區</label>
+  <select id="areaSelect">
     <option value="男方">男方收禮區</option>
     <option value="女方">女方收禮區</option>
   </select>
-  <div class="actions"><button onclick="enterSystem()">進入系統</button></div>
-  <div id="loginMessage"></div>
+  <button onclick="login()">進入管理系統</button>
 </section>
 
-<section id="app" class="hidden">
-  <div class="alert">
-    資料會先儲存在目前瀏覽器，再另外送出 Google 試算表寫入請求。
-    請定期匯出 JSON 備份。
-    由於瀏覽器跨網域限制，畫面無法直接確認雲端寫入成功，請到試算表核對。
-    本系統不會讀取 Google 試算表中的賓客名單。
-  </div>
-
-  <div class="area">
-    <span class="muted">目前固定收禮區</span>
-    <strong id="currentAreaLabel"></strong>
-    <div class="muted">新增紀錄後會保留目前收禮區。</div>
-    <div class="actions">
+<section id="appPanel" class="hidden">
+  <div class="card">
+    <div class="row">
+      <div>
+        <strong>目前收禮區：<span id="activeAreaText"></span></strong>
+        <div class="muted">請確認收禮區正確再進行登記。</div>
+      </div>
       <button class="secondary" onclick="switchArea()">切換收禮區</button>
-      <button class="secondary" onclick="leaveSystem()">離開系統</button>
+      <button class="secondary" onclick="logout()">離開</button>
     </div>
+    <div id="connectionStatus" class="status info">尚未讀取名單</div>
+    <button class="secondary" onclick="loadGuests()">重新讀取賓客名單</button>
+    <span class="muted" id="lastLoaded"></span>
   </div>
 
   <nav class="nav">
-    <button onclick="showPage('home')">總覽</button>
-    <button onclick="showPage('import')">名單匯入／覆蓋</button>
-    <button onclick="showPage('register')">禮金登記</button>
-    <button onclick="showPage('records')">登記紀錄</button>
-    <button onclick="showPage('cake')">喜餅管理</button>
+    <button class="active" onclick="showTab('overview',this)">總覽</button>
+    <button onclick="showTab('register',this)">禮金登記</button>
+    <button onclick="showTab('records',this)">登記紀錄</button>
+    <button onclick="showTab('cakes',this)">喜餅管理</button>
+    <button onclick="showTab('backup',this)">備份還原</button>
   </nav>
 
-  <section id="home" class="page">
-    <div class="grid">
-      <div class="stat"><small>目前賓客人數</small><strong id="guestCount">0</strong></div>
-      <div class="stat"><small>禮金登記筆數</small><strong id="recordCount">0</strong></div>
-      <div class="stat"><small>禮金總額</small><strong id="total">NT$ 0</strong></div>
-      <div class="stat"><small>尚未發送喜餅</small><strong id="cakeCount">0</strong></div>
-    </div>
-    <div class="panel" style="margin-top:16px">
-      <h2>男方／女方禮金統計</h2>
-      <div id="sideStats"></div>
+  <section class="tab" id="tab-overview">
+    <div class="card">
+      <h2>系統總覽</h2>
+      <div class="grid">
+        <div class="stat"><span>賓客總數</span><strong id="guestCount">0</strong></div>
+        <div class="stat"><span>禮金登記筆數</span><strong id="recordCount">0</strong></div>
+        <div class="stat"><span>禮金總額</span><strong id="totalAmount">$0</strong></div>
+        <div class="stat"><span>已發送喜餅</span><strong id="cakeCount">0</strong></div>
+      </div>
+      <p class="muted">正式名單來自 Google 試算表；本機紀錄仍需定期備份。</p>
     </div>
   </section>
 
-  <section id="import" class="page hidden">
-    <div class="panel">
-      <h2>匯入賓客名單</h2>
-      <p>支援 Excel（.xlsx、.xls）及 CSV。確認後，新名單會取代正式名單，既有禮金紀錄會保留，名單外賓客也會保留。</p>
-      <label>選擇名單檔案</label>
-      <input type="file" id="file" accept=".xlsx,.xls,.csv">
-      <div class="muted">必要欄位：姓名、賓客分類、喜餅需求。暱稱選填。</div>
-      <div id="importMessage"></div>
-      <div id="preview" class="hidden">
-        <div id="previewStats" class="good"></div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>姓名</th><th>暱稱</th><th>分類</th><th>喜餅需求</th><th>來源</th></tr></thead>
-            <tbody id="previewRows"></tbody>
-          </table>
-        </div>
-        <div class="actions">
-          <button id="confirmImport" disabled>確認覆蓋舊名單</button>
-          <button class="secondary" onclick="cancelImport()">取消</button>
-        </div>
-      </div>
-    </div>
+  <section class="tab hidden" id="tab-register">
+    <div class="card">
+      <h2>禮金登記</h2>
+      <label for="guestSearch">搜尋姓名或暱稱</label>
+      <input id="guestSearch" placeholder="輸入姓名或暱稱搜尋" oninput="renderGuestOptions()">
 
-    <div class="panel">
-      <h2>Excel 欄位格式</h2>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>姓名</th><th>賓客分類</th><th>喜餅需求</th><th>暱稱（選填）</th></tr></thead>
-          <tbody>
-            <tr><td>王先生</td><td>男方</td><td>需要</td><td>阿明</td></tr>
-            <tr><td>林小姐</td><td>女方</td><td>需要</td><td>小林</td></tr>
-            <tr><td>陳先生</td><td>男方</td><td>不需要</td><td></td></tr>
-          </tbody>
-        </table>
-      </div>
-      <ul>
-        <li>賓客分類只能填「男方」或「女方」。</li>
-        <li>喜餅需求填「需要」或「不需要」，也接受「是／否」、「Y／N」。</li>
-        <li>姓名、分類、喜餅需求不可空白；重複姓名會阻止匯入。</li>
-        <li>名單匯入後，登記人員不能修改正式名單賓客的分類或喜餅需求。</li>
-      </ul>
-    </div>
-  </section>
-
-  <section id="register" class="page hidden">
-    <div class="panel">
-      <h2>新增禮金登記</h2>
-      <div class="area">
-        <span class="muted">本次登記收禮區</span>
-        <strong id="registerAreaLabel"></strong>
-      </div>
-
-      <label>搜尋姓名或暱稱</label>
-      <input id="guestSearch" placeholder="輸入姓名或暱稱">
-
-      <label>選擇賓客</label>
-      <select id="guestSelect">
-        <option value="">請選擇賓客</option>
+      <label for="guestSelect">選擇賓客</label>
+      <select id="guestSelect" onchange="showGuestInfo()">
+        <option value="">請先讀取賓客名單</option>
       </select>
 
-      <div id="manualGuestFields" class="hidden">
-        <div class="alert">
-          名單外賓客：請自行輸入姓名、選擇賓客分類及喜餅需求。
-          系統仍會檢查收禮區，禁止跨區登記。
-        </div>
-        <label>賓客姓名</label>
-        <input id="manualGuestName" placeholder="請輸入賓客姓名">
-        <label>賓客分類</label>
-        <select id="manualGuestSide">
-          <option value="">請選擇</option>
+      <div id="guestInfo" class="status info hidden"></div>
+      <div id="cakeReminder" class="hidden" role="alert" aria-live="polite"></div>
+
+      <button class="secondary" onclick="toggleManual()">＋ 名單沒有？手動新增賓客</button>
+
+      <div id="manualPanel" class="hidden">
+        <h3>現場新增賓客</h3>
+        <p class="muted">新增資料先保存在目前瀏覽器，不會自動寫入 Google 正式名單。</p>
+        <label for="manualName">姓名（必填）</label>
+        <input id="manualName" placeholder="請輸入姓名">
+        <label for="manualNickname">暱稱（選填）</label>
+        <input id="manualNickname" placeholder="請輸入暱稱">
+        <label for="manualSide">賓客分類</label>
+        <select id="manualSide">
           <option value="男方">男方</option>
           <option value="女方">女方</option>
         </select>
-        <label>喜餅需求</label>
-        <select id="manualGuestCake">
-          <option value="">請選擇</option>
-          <option value="yes">需要喜餅</option>
-          <option value="no">不需要喜餅</option>
+        <label for="manualCake">喜餅需求</label>
+        <select id="manualCake">
+          <option value="true">需要</option>
+          <option value="false">不需要</option>
+        </select>
+        <button onclick="useManualGuest()">確認這位賓客</button>
+      </div>
+
+      <label for="giftAmount">禮金金額（必填）</label>
+      <input id="giftAmount" type="number" min="0" step="1" placeholder="例如：3600">
+
+      <label for="giftNote">備註（選填）</label>
+      <textarea id="giftNote" placeholder="例如：同事、親友代包等"></textarea>
+
+      <div id="cakeConfirmArea" class="hidden cake-confirm">
+        <div style="font-weight:900;color:#a40000;font-size:18px">
+          ⚠️ 喜餅防漏發確認
+        </div>
+        <p style="margin:6px 0">這位賓客需要喜餅，登記前請確認現場人員已注意到。</p>
+        <label style="display:flex;align-items:center;gap:8px;font-weight:700">
+          <input type="checkbox" id="cakeConfirmed" style="width:auto">
+          我已確認此賓客需要喜餅
+        </label>
+      </div>
+
+      <button onclick="registerGift()">確認登記禮金</button>
+      <div id="registerMessage" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section class="tab hidden" id="tab-records">
+    <div class="card">
+      <h2>登記紀錄</h2>
+      <div class="row">
+        <input id="recordSearch" placeholder="搜尋姓名或備註" oninput="renderRecords()">
+        <select id="recordSide" onchange="renderRecords()">
+          <option value="">全部分類</option><option value="男方">男方</option><option value="女方">女方</option>
+        </select>
+        <select id="recordArea" onchange="renderRecords()">
+          <option value="">全部收禮區</option><option value="男方">男方</option><option value="女方">女方</option>
         </select>
       </div>
-
-      <div id="guestInfo"></div>
-      <label>禮金金額（新臺幣）</label>
-      <input id="amount" type="number" min="1" step="1" placeholder="例如 2600">
-      <label>備註（選填）</label>
-      <textarea id="note" rows="2" placeholder="例如：由家人代收"></textarea>
-      <div class="actions"><button onclick="addRecord()">確認登記</button></div>
-      <div id="registerMessage"></div>
+      <button onclick="exportRecords()">匯出禮金紀錄 CSV</button>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>時間</th><th>姓名</th><th>分類</th><th>收禮區</th><th>金額</th><th>備註</th><th>同步狀態</th></tr></thead>
+          <tbody id="recordsBody"></tbody>
+        </table>
+      </div>
+      <p class="muted">「已送出請求」不代表 Google 已確認寫入，請到試算表確認。</p>
     </div>
   </section>
 
-  <section id="records" class="page hidden">
-    <div class="panel">
-      <h2>禮金登記紀錄</h2>
+  <section class="tab hidden" id="tab-cakes">
+    <div class="card">
+      <h2>喜餅管理</h2>
       <div class="row">
-        <div><label>搜尋</label><input id="recordSearch" placeholder="流水號、姓名或備註"></div>
-        <div><label>賓客分類</label><select id="recordSide"><option value="">全部</option><option>男方</option><option>女方</option></select></div>
-        <div><label>登記收禮區</label><select id="recordArea"><option value="">全部</option><option>男方</option><option>女方</option></select></div>
+        <input id="cakeSearch" placeholder="搜尋姓名或暱稱" oninput="renderCakes()">
+        <select id="cakeSide" onchange="renderCakes()">
+          <option value="">全部分類</option><option value="男方">男方</option><option value="女方">女方</option>
+        </select>
+        <select id="cakeStatus" onchange="renderCakes()">
+          <option value="">全部狀態</option><option value="sent">已發送</option><option value="unsent">未發送</option>
+        </select>
       </div>
-      <div class="actions">
-        <button onclick="exportRecords()">匯出禮金 Excel</button>
-        <button class="secondary" onclick="exportBackup()">備份全部資料 JSON</button>
-        <button class="secondary" onclick="importBackup()">還原 JSON 備份</button>
-      </div>
-      <input type="file" id="backupFile" accept=".json" class="hidden">
-      <div id="backupMessage"></div>
+      <button onclick="exportCakes()">匯出喜餅紀錄 CSV</button>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>流水號</th><th>姓名</th><th>賓客分類</th><th>收禮區</th><th>喜餅需求</th><th>金額</th><th>備註</th><th>登記時間</th></tr></thead>
-          <tbody id="recordRows"></tbody>
+          <thead><tr><th>姓名</th><th>暱稱</th><th>分類</th><th>需求</th><th>發送狀態</th><th>操作</th></tr></thead>
+          <tbody id="cakesBody"></tbody>
         </table>
       </div>
     </div>
   </section>
 
-  <section id="cake" class="page hidden">
-    <div class="panel">
-      <h2>喜餅發送管理</h2>
-      <div class="alert">喜餅需求依名單設定；名單外賓客的喜餅需求在首次登記時選擇。此頁面只用來記錄是否已發送。</div>
-      <div class="row">
-        <div><label>賓客分類</label><select id="cakeSide"><option value="">全部</option><option>男方</option><option>女方</option></select></div>
-        <div><label>發送狀態</label><select id="cakeStatus"><option value="">全部</option><option value="no">尚未發送</option><option value="yes">已發送</option></select></div>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>姓名</th><th>分類</th><th>來源</th><th>喜餅需求</th><th>發送狀態</th><th>操作</th></tr></thead>
-          <tbody id="cakeRows"></tbody>
-        </table>
-      </div>
-      <div class="actions"><button onclick="exportCake()">匯出喜餅 Excel</button></div>
+  <section class="tab hidden" id="tab-backup">
+    <div class="card">
+      <h2>備份與還原</h2>
+      <p class="muted">備份包含本機禮金紀錄、現場新增賓客及喜餅發送狀態。</p>
+      <button onclick="downloadBackup()">下載 JSON 備份</button>
+      <label for="restoreFile">選擇 JSON 備份檔</label>
+      <input id="restoreFile" type="file" accept=".json,application/json">
+      <button onclick="restoreBackup()">還原備份</button>
     </div>
   </section>
 </section>
 </main>
 
+<footer>婚禮禮金管理系統｜請定期備份並確認試算表同步情況</footer>
+
 <script>
-"use strict";
-
-/* Google Apps Script 正式 /exec 網址 */
 const GOOGLE_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbygEoQgE4YCnZvQ2nK9M_08hiwAOtrd4JrnP4gUC1dqRVeelJ65MLMB9QSXtdeSrrrq-Q/exec";
+"https://script.google.com/macros/s/AKfycbygEoQgE4YCnZvQ2nK9M_08hiwAOtrd4JrnP4gUC1dqRVeelJ65MLMB9QSXtdeSrrrq-Q/exec";
 
-const STORAGE_KEY = "wedding_gift_manager_v2";
+const STORAGE_KEY = "wedding_gift_manager_v3";
+const MANUAL_KEY = "wedding_gift_manual_guests_v1";
+const CAKE_KEY = "wedding_gift_cake_sent_v1";
 
-let data = loadData();
 let activeArea = "";
-let stagedGuests = null;
+let guests = [];
+let manualGuests = readJSON(MANUAL_KEY, []);
+let records = readJSON(STORAGE_KEY, []);
+let selectedManualGuest = null;
 
-function loadData(){
-  try{
-    const d = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
-    return {
-      guests:Array.isArray(d.guests) ? d.guests : [],
-      records:Array.isArray(d.records) ? d.records : [],
-      cakeSent:d.cakeSent && typeof d.cakeSent === "object" ? d.cakeSent : {}
-    };
-  }catch(e){
-    return {guests:[],records:[],cakeSent:{}};
-  }
+function readJSON(key, fallback) {
+  try {
+    const value = JSON.parse(localStorage.getItem(key) || "null");
+    return value === null ? fallback : value;
+  } catch(e) { return fallback; }
 }
-
-function save(){
-  try{
-    localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
-    render();
-  }catch(e){
-    alert("儲存失敗。可能是瀏覽器儲存空間不足，請先匯出備份。");
-  }
+function saveLocal() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+  localStorage.setItem(MANUAL_KEY, JSON.stringify(manualGuests));
 }
-
-function esc(v){
-  return String(v ?? "").replace(/[&<>"']/g,c=>({
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, c => ({
     "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  }[c]));
+  })[c]);
 }
-
-function norm(v){
-  return String(v ?? "").trim().toLowerCase().replace(/\s/g,"");
+function login() {
+  activeArea = document.getElementById("areaSelect").value;
+  document.getElementById("loginPanel").classList.add("hidden");
+  document.getElementById("appPanel").classList.remove("hidden");
+  document.getElementById("activeAreaText").textContent = activeArea;
+  loadGuests();
+  renderAll();
 }
-
-function money(n){
-  return Number(n || 0).toLocaleString("zh-TW");
-}
-
-function isNeedCake(v){
-  return ["需要","是","要","y","yes","true","1","需要喜餅"].includes(norm(v));
-}
-
-function isNoCake(v){
-  return ["不需要","否","不要","n","no","false","0","不需要喜餅"].includes(norm(v));
-}
-
-function findCol(headers,aliases){
-  return headers.findIndex(h=>aliases.includes(norm(h)));
-}
-
-function newId(){
-  return "G" + Date.now().toString(36) + Math.random().toString(36).slice(2,8);
-}
-
-async function sendRecordToGoogle(record){
-  try{
-    await fetch(GOOGLE_SCRIPT_URL,{
-      method:"POST",
-      mode:"no-cors",
-      headers:{"Content-Type":"text/plain;charset=UTF-8"},
-      body:JSON.stringify({
-        date:record.date,
-        serial:record.serial,
-        name:record.name,
-        side:record.side,
-        registerArea:record.registerArea,
-        cake:record.cake,
-        amount:record.amount,
-        note:record.note
-      })
-    });
-    return {
-      sent:true,
-      message:"已送出 Google 試算表寫入請求，但尚未確認伺服器是否成功寫入。"
-    };
-  }catch(error){
-    console.error("Google 試算表送出失敗：",error);
-    return {
-      sent:false,
-      message:"送出 Google 試算表請求時發生網路錯誤。請檢查網路並核對試算表。"
-    };
-  }
-}
-
-/* 收禮區 */
-function enterSystem(){
-  const area = document.getElementById("initialArea").value;
-  if(!area){
-    showMessage("loginMessage","error","請先選擇男方或女方收禮區。");
-    return;
-  }
-  activeArea = area;
-  document.getElementById("login").classList.add("hidden");
-  document.getElementById("app").classList.remove("hidden");
-  updateAreaLabels();
-  showPage("register");
-}
-
-function updateAreaLabels(){
-  document.getElementById("currentAreaLabel").textContent = activeArea+"收禮區";
-  document.getElementById("registerAreaLabel").textContent = activeArea+"收禮區";
-}
-
-function leaveSystem(){
-  if(!confirm("確定離開系統並返回收禮區選擇畫面？"))return;
+function logout() {
   activeArea = "";
-  document.getElementById("app").classList.add("hidden");
-  document.getElementById("login").classList.remove("hidden");
-  document.getElementById("initialArea").value = "";
-  document.getElementById("loginMessage").innerHTML = "";
+  selectedManualGuest = null;
+  document.getElementById("appPanel").classList.add("hidden");
+  document.getElementById("loginPanel").classList.remove("hidden");
 }
-
-function switchArea(){
-  if(!confirm("切換收禮區後，接下來的登記會使用新的收禮區。是否繼續？"))return;
-  leaveSystem();
+function switchArea() {
+  document.getElementById("areaSelect").value =
+    activeArea === "男方" ? "女方" : "男方";
+  activeArea = document.getElementById("areaSelect").value;
+  document.getElementById("activeAreaText").textContent = activeArea;
+  selectedManualGuest = null;
+  document.getElementById("guestSelect").value = "";
+  document.getElementById("guestInfo").classList.add("hidden");
+  clearCakeReminder();
+  renderGuestOptions();
+  renderAll();
 }
-
-function showPage(id){
-  document.querySelectorAll(".page").forEach(p=>p.classList.add("hidden"));
-  document.getElementById(id).classList.remove("hidden");
-  render();
+function showTab(name, button) {
+  document.querySelectorAll(".tab").forEach(el => el.classList.add("hidden"));
+  document.getElementById("tab-" + name).classList.remove("hidden");
+  document.querySelectorAll(".nav button").forEach(el => el.classList.remove("active"));
+  if(button) button.classList.add("active");
+  renderAll();
 }
-
-function showMessage(id,type,text){
-  document.getElementById(id).innerHTML =
-    '<div class="'+type+'">'+esc(text).replace(/\n/g,"<br>")+'</div>';
+function setConnection(message, type) {
+  const el = document.getElementById("connectionStatus");
+  el.textContent = message;
+  el.className = "status " + (type || "info");
 }
-
-function getGuest(id){
-  return data.guests.find(g=>g.id===id);
-}
-
-function getRecordsForGuest(id){
-  return data.records.filter(r=>r.guestId===id);
-}
-
-/* 畫面更新 */
-function render(){
-  document.getElementById("guestCount").textContent = data.guests.length;
-  document.getElementById("recordCount").textContent = data.records.length;
-  document.getElementById("total").textContent = "NT$ "+money(
-    data.records.reduce((sum,r)=>sum+Number(r.amount||0),0)
-  );
-  document.getElementById("cakeCount").textContent = data.guests.filter(
-    g=>g.cake && !data.cakeSent[g.id]
-  ).length;
-
-  document.getElementById("sideStats").innerHTML = ["男方","女方"].map(side=>{
-    const rs = data.records.filter(r=>r.side===side);
-    return `<p><strong>${side}</strong>：${rs.length} 筆，合計 NT$ ${money(
-      rs.reduce((s,r)=>s+Number(r.amount||0),0)
-    )}</p>`;
-  }).join("");
-
-  const search = norm(document.getElementById("guestSearch").value);
-  const previous = document.getElementById("guestSelect").value;
-  const matches = data.guests.filter(g=>norm(g.name+" "+g.nick).includes(search));
-
-  document.getElementById("guestSelect").innerHTML =
-    '<option value="">請選擇賓客</option>'+
-    matches.map(g=>
-      `<option value="${esc(g.id)}">${esc(g.name)}${g.nick?"（"+esc(g.nick)+"）":""}｜${esc(g.side)}${g.walkIn?"｜名單外":""}</option>`
-    ).join("")+
-    '<option value="__manual__">＋ 名單外賓客（自行輸入）</option>';
-
-  if(previous==="__manual__" || matches.some(g=>g.id===previous)){
-    document.getElementById("guestSelect").value = previous;
-  }
-
-  document.getElementById("manualGuestFields").classList.toggle(
-    "hidden",document.getElementById("guestSelect").value!=="__manual__"
-  );
-
-  showGuestInfo();
-
-  const rq = norm(document.getElementById("recordSearch").value);
-  const rs = document.getElementById("recordSide").value;
-  const ra = document.getElementById("recordArea").value;
-
-  const records = data.records.filter(r=>
-    norm(r.serial+" "+r.name+" "+r.note).includes(rq) &&
-    (!rs || r.side===rs) &&
-    (!ra || r.registerArea===ra)
-  ).slice().reverse();
-
-  document.getElementById("recordRows").innerHTML = records.map(r=>`
-    <tr>
-      <td>${esc(r.serial)}</td><td>${esc(r.name)}</td><td>${esc(r.side)}</td>
-      <td>${esc(r.registerArea||"舊紀錄")}</td>
-      <td>${r.cake?"需要喜餅":"不需要喜餅"}</td>
-      <td>NT$ ${money(r.amount)}</td><td>${esc(r.note)}</td><td>${esc(r.date)}</td>
-    </tr>`).join("") || '<tr><td colspan="8">目前沒有紀錄</td></tr>';
-
-  const cs = document.getElementById("cakeSide").value;
-  const status = document.getElementById("cakeStatus").value;
-  const cakeGuests = data.guests.filter(g=>
-    g.cake &&
-    (!cs || g.side===cs) &&
-    (!status || (status==="yes" && !!data.cakeSent[g.id]) ||
-      (status==="no" && !data.cakeSent[g.id]))
-  );
-
-  document.getElementById("cakeRows").innerHTML = cakeGuests.map(g=>`
-    <tr>
-      <td>${esc(g.name)}${g.nick?"（"+esc(g.nick)+"）":""}</td>
-      <td>${esc(g.side)}</td><td>${g.walkIn?"名單外":"正式名單"}</td>
-      <td><strong>需要喜餅</strong></td>
-      <td>${data.cakeSent[g.id]?"已發送":"尚未發送"}</td>
-      <td><button class="secondary" onclick="toggleCake('${esc(g.id)}')">${data.cakeSent[g.id]?"撤銷發送標記":"確認已發送"}</button></td>
-    </tr>`).join("") || '<tr><td colspan="6">沒有符合條件的賓客</td></tr>';
-}
-
-/* 賓客資訊及跨區防呆 */
-function showGuestInfo(){
-  const select = document.getElementById("guestSelect");
-  const el = document.getElementById("guestInfo");
-  const id = select.value;
-
-  if(!id || id==="__manual__"){
-    el.innerHTML = "";
-    return;
-  }
-
-  const g = getGuest(id);
-  if(!g){el.innerHTML="";return;}
-
-  if(g.side!==activeArea){
-    el.innerHTML = `<div class="error">
-      <strong>⛔ 禁止登記：收禮區不符</strong><br>
-      此賓客屬於「${esc(g.side)}賓客」，目前是「${esc(activeArea)}收禮區」。<br>
-      請引導賓客前往正確收禮區。
-    </div>`;
-    return;
-  }
-
-  const existing = getRecordsForGuest(g.id);
-  el.innerHTML = `<div class="good">
-    <strong>賓客分類：${esc(g.side)}</strong><br>
-    ${g.walkIn?'<div class="muted">名單外登記賓客</div>':""}
-    ${g.cake
-      ? `<div class="gift yes">🎁 此賓客需要喜餅</div><div>${data.cakeSent[g.id]?"喜餅狀態：已發送":"提醒：此賓客需要喜餅，請留意發送狀態。"}</div>`
-      : `<div class="gift no">此賓客不需要喜餅</div>`}
-    ${existing.length?`<div class="alert">⚠ 此賓客已有 ${existing.length} 筆禮金紀錄：${existing.map(r=>esc(r.serial)).join("、")}</div>`:""}
-  </div>`;
-}
-
-document.getElementById("guestSearch").addEventListener("input",render);
-document.getElementById("guestSelect").addEventListener("change",()=>{
-  const manual = document.getElementById("guestSelect").value==="__manual__";
-  document.getElementById("manualGuestFields").classList.toggle("hidden",!manual);
-  if(manual){
-    document.getElementById("guestInfo").innerHTML="";
-  }else{
-    document.getElementById("manualGuestName").value="";
-    document.getElementById("manualGuestSide").value="";
-    document.getElementById("manualGuestCake").value="";
-    showGuestInfo();
-  }
-});
-
-["recordSearch","recordSide","recordArea","cakeSide","cakeStatus"].forEach(id=>{
-  document.getElementById(id).addEventListener("input",render);
-  document.getElementById(id).addEventListener("change",render);
-});
-
-/* 新增禮金紀錄 */
-async function addRecord(){
-  const manual = document.getElementById("guestSelect").value==="__manual__";
-  const amount = Number(document.getElementById("amount").value);
-  const note = document.getElementById("note").value.trim();
-  let g;
-
-  if(!activeArea){
-    showMessage("registerMessage","error","尚未選擇收禮區，請重新進入系統。");
-    return;
-  }
-
-  if(manual){
-    const name = document.getElementById("manualGuestName").value.trim();
-    const side = document.getElementById("manualGuestSide").value;
-    const cakeValue = document.getElementById("manualGuestCake").value;
-
-    if(!name){
-      showMessage("registerMessage","error","請輸入賓客姓名。");return;
-    }
-    if(!["男方","女方"].includes(side)){
-      showMessage("registerMessage","error","請選擇男方或女方分類。");return;
-    }
-    if(!cakeValue){
-      showMessage("registerMessage","error","請選擇喜餅需求。");return;
-    }
-
-    const sameGuest = data.guests.find(x=>norm(x.name)===norm(name));
-    if(sameGuest && !confirm(
-      "名單中已有同名賓客「"+sameGuest.name+"」（"+sameGuest.side+"）。\n"+
-      "請先確認是否應選擇名單內的賓客。仍要新增名單外賓客嗎？"
-    ))return;
-
-    g = {
-      id:newId(),name,nick:"",side,
-      cake:cakeValue==="yes",walkIn:true
-    };
-  }else{
-    g = getGuest(document.getElementById("guestSelect").value);
-    if(!g){
-      showMessage("registerMessage","error","請選擇賓客或自行輸入名單外賓客。");return;
-    }
-  }
-
-  if(g.side!==activeArea){
-    showMessage("registerMessage","error",
-      "禁止跨區登記！此賓客分類為「"+g.side+
-      "」，目前是「"+activeArea+"收禮區」。");
-    return;
-  }
-
-  if(!Number.isSafeInteger(amount)||amount<=0){
-    showMessage("registerMessage","error","請輸入正確的正整數金額。");return;
-  }
-
-  const existing = manual
-    ? data.records.filter(r=>norm(r.name)===norm(g.name))
-    : getRecordsForGuest(g.id);
-
-  if(existing.length && !confirm(
-    "此姓名已有 "+existing.length+" 筆禮金紀錄："+
-    existing.map(r=>r.serial).join("、")+
-    "\n請確認是否為不同筆禮金。是否繼續新增？"
-  ))return;
-
-  const cakeText = g.cake?"需要喜餅":"不需要喜餅";
-  if(!confirm(
-    "請確認登記資料：\n\n"+
-    "姓名："+g.name+"\n"+
-    "賓客分類："+g.side+"\n"+
-    "目前收禮區："+activeArea+"\n"+
-    "喜餅需求："+cakeText+"\n"+
-    "禮金金額：NT$ "+money(amount)+"\n\n"+
-    "是否確認登記？"
-  ))return;
-
-  const serial = "G"+Date.now().toString(36).toUpperCase()+"-"+
-    Math.random().toString(36).slice(2,6).toUpperCase();
-
-  const newRecord = {
-    serial,guestId:g.id,name:g.name,side:g.side,
-    registerArea:activeArea,cake:g.cake,amount,note,
-    date:new Date().toLocaleString("zh-TW",{timeZone:"Asia/Taipei"})
+function loadGuests() {
+  setConnection("正在讀取 Google 試算表名單……","info");
+  const callbackName = "guestCallback_" + Date.now() + "_" + Math.floor(Math.random()*100000);
+  const script = document.createElement("script");
+  let finished = false;
+  const cleanup = () => {
+    try { delete window[callbackName]; } catch(e) { window[callbackName] = undefined; }
+    if(script.parentNode) script.parentNode.removeChild(script);
   };
-
-  if(manual){
-    data.guests.push(g);
-    if(g.cake)data.cakeSent[g.id]=false;
-  }
-
-  data.records.push(newRecord);
-
-  document.getElementById("amount").value="";
-  document.getElementById("note").value="";
-  document.getElementById("guestSearch").value="";
-  document.getElementById("guestSelect").value="";
-  document.getElementById("manualGuestName").value="";
-  document.getElementById("manualGuestSide").value="";
-  document.getElementById("manualGuestCake").value="";
-  document.getElementById("manualGuestFields").classList.add("hidden");
-
-  save();
-
-  showMessage("registerMessage","good",
-    "本機登記已完成！\n流水號："+serial+
-    "\n賓客："+g.name+
-    "\n賓客來源："+(manual?"名單外賓客":"正式名單")+
-    "\n喜餅需求："+cakeText+
-    "\n收禮區仍維持："+activeArea+"收禮區。\n"+
-    "正在送出 Google 試算表寫入請求……");
-
-  const result = await sendRecordToGoogle(newRecord);
-  showMessage("registerMessage",result.sent?"alert":"error",
-    "本機登記已保存。\n流水號："+serial+"\n"+
-    result.message+"\n請到 Google 試算表核對是否出現這筆資料。");
-}
-
-/* 喜餅管理 */
-function toggleCake(id){
-  const g = getGuest(id);
-  if(!g || !g.cake){
-    alert("此賓客不需要喜餅，不能標記為已發送。");return;
-  }
-  const next = !data.cakeSent[id];
-  if(!confirm(next?"確認將「"+g.name+"」標記為已發送喜餅？":"確定撤銷此筆喜餅發送標記？"))return;
-  if(next)data.cakeSent[id]=true;
-  else delete data.cakeSent[id];
-  save();
-}
-
-/* Excel／CSV 名單匯入 */
-function cancelImport(){
-  stagedGuests=null;
-  document.getElementById("preview").classList.add("hidden");
-  document.getElementById("file").value="";
-  document.getElementById("importMessage").innerHTML="";
-}
-
-document.getElementById("file").addEventListener("change",async e=>{
-  stagedGuests=null;
-  document.getElementById("preview").classList.add("hidden");
-  document.getElementById("confirmImport").disabled=true;
-  document.getElementById("importMessage").innerHTML="";
-
-  const file=e.target.files[0];
-  if(!file)return;
-
-  try{
-    if(!window.XLSX)throw new Error("Excel 讀取元件未載入，請檢查網路連線。");
-    const buffer=await file.arrayBuffer();
-    const workbook=XLSX.read(buffer,{type:"array"});
-    const sheet=workbook.Sheets[workbook.SheetNames[0]];
-    const rows=XLSX.utils.sheet_to_json(sheet,{defval:"",raw:false});
-    if(!rows.length)throw new Error("檔案沒有可讀取的資料。");
-
-    const headers=Object.keys(rows[0]);
-    const nameCol=findCol(headers,["姓名","賓客姓名","名字","name","guestname"]);
-    const nickCol=findCol(headers,["暱稱","別名","稱呼","nickname","alias"]);
-    const sideCol=findCol(headers,["賓客分類","分類","男方女方","來源","男/女方","side"]);
-    const cakeCol=findCol(headers,["喜餅需求","需要喜餅","是否需要喜餅","喜餅","發餅","cake"]);
-
-    if(nameCol<0)throw new Error("找不到姓名欄位，請使用「姓名」。");
-    if(sideCol<0)throw new Error("找不到賓客分類欄位，請使用「賓客分類」。");
-    if(cakeCol<0)throw new Error("找不到喜餅需求欄位，請使用「喜餅需求」。");
-
-    const next=[];
-    const seen=new Set();
-    const errors=[];
-
-    rows.forEach((row,i)=>{
-      const line=i+2;
-      const name=String(row[headers[nameCol]]??"").trim();
-      const nick=nickCol<0?"":String(row[headers[nickCol]]??"").trim();
-      const rawSide=norm(row[headers[sideCol]]);
-      const rawCake=row[headers[cakeCol]];
-      const side=rawSide==="男方"?"男方":rawSide==="女方"?"女方":"";
-      const cake=isNeedCake(rawCake)?true:isNoCake(rawCake)?false:null;
-
-      if(!name){errors.push("第 "+line+" 列：姓名空白");return;}
-      if(!side){errors.push("第 "+line+" 列：賓客分類必須填「男方」或「女方」");return;}
-      if(cake===null){errors.push("第 "+line+" 列：喜餅需求無法辨識");return;}
-
-      const key=norm(name);
-      if(seen.has(key)){errors.push("第 "+line+" 列：姓名「"+name+"」重複");return;}
-      seen.add(key);
-
-      const old=data.guests.find(g=>!g.walkIn&&norm(g.name)===key);
-      next.push({id:old?old.id:newId(),name,nick,side,cake,walkIn:false});
-    });
-
-    if(errors.length)throw new Error(
-      "名單有 "+errors.length+" 項錯誤，尚未覆蓋舊名單：\n"+
-      errors.slice(0,20).join("\n")+(errors.length>20?"\n其餘錯誤略。":"")
-    );
-    if(!next.length)throw new Error("沒有有效賓客資料。");
-
-    stagedGuests=next;
-    document.getElementById("previewStats").textContent=
-      "正式名單："+next.length+" 人；男方："+next.filter(g=>g.side==="男方").length+
-      " 人；女方："+next.filter(g=>g.side==="女方").length+
-      " 人；需要喜餅："+next.filter(g=>g.cake).length+
-      " 人。確認後會保留原有名單外賓客。";
-
-    document.getElementById("previewRows").innerHTML=next.slice(0,50).map(g=>
-      `<tr><td>${esc(g.name)}</td><td>${esc(g.nick)}</td><td>${esc(g.side)}</td><td>${g.cake?"需要":"不需要"}</td><td>正式名單</td></tr>`
-    ).join("");
-
-    document.getElementById("preview").classList.remove("hidden");
-    document.getElementById("confirmImport").disabled=false;
-
-    document.getElementById("importMessage").innerHTML=next.length>50
-      ?'<div class="alert">預覽只顯示前 50 位，確認後會匯入完整名單。</div>':"";
-  }catch(err){
-    showMessage("importMessage","error",err.message||"匯入失敗。");
-  }
-});
-
-document.getElementById("confirmImport").addEventListener("click",()=>{
-  if(!stagedGuests||!stagedGuests.length)return;
-  if(!confirm(
-    "即將以新名單覆蓋正式名單。\n"+
-    "新正式名單："+stagedGuests.length+" 人\n"+
-    "目前名單外賓客："+data.guests.filter(g=>g.walkIn).length+" 人\n"+
-    "既有禮金紀錄會保留。是否繼續？"
-  ))return;
-
-  const walkInGuests=data.guests.filter(g=>
-    g.walkIn&&!stagedGuests.some(s=>norm(s.name)===norm(g.name))
-  );
-
-  // 若名單外賓客已出現在新正式名單，以正式名單為主
-  const finalWalkIns=walkInGuests.filter(g=>
-    !stagedGuests.some(s=>norm(s.name)===norm(g.name))
-  );
-
-  const oldSent=data.cakeSent;
-  const nextSent={};
-
-  [...stagedGuests,...finalWalkIns].forEach(g=>{
-    if(g.cake&&oldSent[g.id])nextSent[g.id]=true;
-  });
-
-  data.guests=[...stagedGuests,...finalWalkIns];
-  data.cakeSent=nextSent;
-  stagedGuests=null;
-
-  save();
-  cancelImport();
-  showMessage("importMessage","good","正式名單覆蓋完成。既有禮金紀錄與未重複的名單外賓客已保留。");
-});
-
-/* Excel 匯出 */
-function makeWorkbook(sheetName,rows){
-  if(!window.XLSX){alert("Excel 匯出元件未載入，請檢查網路連線。");return null;}
-  const wb=XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(rows),sheetName);
-  return wb;
-}
-
-function exportRecords(){
-  const rows=[["流水號","姓名","賓客分類","收禮區","喜餅需求","金額","備註","登記時間"],
-    ...data.records.map(r=>[
-      r.serial,r.name,r.side,r.registerArea||"舊紀錄",
-      r.cake?"需要喜餅":"不需要喜餅",r.amount,r.note,r.date
-    ])];
-  const wb=makeWorkbook("禮金明細",rows);
-  if(wb)XLSX.writeFile(wb,"婚禮禮金明細.xlsx");
-}
-
-function exportCake(){
-  const rows=[["姓名","暱稱","分類","來源","喜餅需求","是否已發送"],
-    ...data.guests.map(g=>[
-      g.name,g.nick,g.side,g.walkIn?"名單外":"正式名單",
-      g.cake?"需要":"不需要",
-      g.cake?(data.cakeSent[g.id]?"已發送":"尚未發送"):"不適用"
-    ])];
-  const wb=makeWorkbook("喜餅清單",rows);
-  if(wb)XLSX.writeFile(wb,"婚禮喜餅清單.xlsx");
-}
-
-/* JSON 備份與還原 */
-function exportBackup(){
-  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement("a");
-  a.href=url;
-  a.download="婚禮禮金備份.json";
-  a.click();
-  setTimeout(()=>URL.revokeObjectURL(url),1000);
-}
-
-function importBackup(){
-  document.getElementById("backupFile").click();
-}
-
-document.getElementById("backupFile").addEventListener("change",async e=>{
-  const file=e.target.files[0];
-  if(!file)return;
-  try{
-    const parsed=JSON.parse(await file.text());
-    if(!parsed||!Array.isArray(parsed.guests)||!Array.isArray(parsed.records)){
-      throw new Error("備份檔格式不正確。");
+  const timer = setTimeout(() => {
+    if(finished) return;
+    finished = true;
+    cleanup();
+    setConnection("讀取逾時，請確認 Apps Script 部署網址與權限。","error");
+  },20000);
+  window[callbackName] = result => {
+    if(finished) return;
+    finished = true;
+    clearTimeout(timer);
+    cleanup();
+    if(!result || !result.ok) {
+      setConnection("讀取失敗："+(result?.error || "資料格式不正確"),"error");
+      return;
     }
-    if(!confirm("還原備份會取代目前名單及紀錄。建議先匯出目前資料備份。確定還原？"))return;
-    data={
-      guests:parsed.guests,
-      records:parsed.records,
-      cakeSent:parsed.cakeSent||{}
-    };
-    save();
-    showMessage("backupMessage","good","備份還原完成。");
-  }catch(err){
-    showMessage("backupMessage","error","還原失敗："+(err.message||"檔案格式錯誤"));
-  }finally{
-    e.target.value="";
-  }
-});
+    guests = Array.isArray(result.guests) ? result.guests : [];
+    document.getElementById("lastLoaded").textContent =
+      "最後讀取："+new Date().toLocaleString("zh-TW");
+    setConnection("已讀取 Google 試算表，共 "+guests.length+" 位賓客。","ok");
+    renderGuestOptions();
+    renderAll();
+  };
+  script.onerror = () => {
+    if(finished) return;
+    finished = true;
+    clearTimeout(timer);
+    cleanup();
+    setConnection("無法連線，請檢查 Apps Script 網址與部署設定。","error");
+  };
+  script.src = GOOGLE_SCRIPT_URL+"?action=guests&callback="+
+    encodeURIComponent(callbackName)+"&_="+Date.now();
+  document.body.appendChild(script);
+}
+function allGuests() {
+  const ids = new Set(guests.map(g => String(g.id)));
+  return [...guests,...manualGuests.filter(g => !ids.has(String(g.id)))];
+}
+function findGuest(id) {
+  return allGuests().find(g => String(g.id) === String(id));
+}
+function renderGuestOptions() {
+  const select = document.getElementById("guestSelect");
+  const query = document.getElementById("guestSearch").value.trim().toLowerCase();
+  const current = select.value;
+  const list = allGuests().filter(g =>
+    (g.name+" "+(g.nickname || "")).toLowerCase().includes(query)
+  );
+  select.innerHTML = '<option value="">請選擇賓客</option>' +
+    list.map(g => `<option value="${escapeHTML(g.id)}">${escapeHTML(g.name)}${g.manual?"（現場新增）":""}${g.nickname?"｜"+escapeHTML(g.nickname):""}｜${escapeHTML(g.side)}</option>`).join("");
+  if(list.some(g => String(g.id) === current)) select.value = current;
+  showGuestInfo();
+}
+function clearCakeReminder() {
+  const reminder = document.getElementById("cakeReminder");
+  reminder.className = "hidden";
+  reminder.textContent = "";
+  document.getElementById("cakeConfirmArea").classList.add("hidden");
+  document.getElementById("cakeConfirmed").checked = false;
+}
+function showCakeReminder(guest) {
+  const reminder = document.getElementById("cakeReminder");
+  const confirmArea = document.getElementById("cakeConfirmArea");
+  document.getElementById("cakeConfirmed").checked = false;
 
-/* 初始畫面 */
-render();
+  if(guest.cake) {
+    reminder.className = "cake-alert";
+    reminder.innerHTML =
+      "🎁 ⚠️ 此賓客需要喜餅！"+
+      "<small>請記得確認喜餅並完成發送，避免漏發！</small>";
+    confirmArea.classList.remove("hidden");
+  } else {
+    reminder.className = "cake-no";
+    reminder.textContent = "✓ 此賓客不需要喜餅";
+    confirmArea.classList.add("hidden");
+  }
+}
+function showGuestInfo() {
+  const guest = findGuest(document.getElementById("guestSelect").value);
+  const info = document.getElementById("guestInfo");
+  if(!guest) {
+    info.classList.add("hidden");
+    clearCakeReminder();
+    selectedManualGuest = null;
+    return;
+  }
+  selectedManualGuest = null;
+  info.classList.remove("hidden");
+  info.textContent = "姓名："+guest.name+"｜分類："+guest.side+
+    (guest.manual?"｜現場新增":"");
+  showCakeReminder(guest);
+}
+function toggleManual() {
+  document.getElementById("manualPanel").classList.toggle("hidden");
+}
+function useManualGuest() {
+  const name = document.getElementById("manualName").value.trim();
+  const nickname = document.getElementById("manualNickname").value.trim();
+  const side = document.getElementById("manualSide").value;
+  const cake = document.getElementById("manualCake").value === "true";
+
+  if(!name) { alert("請先輸入賓客姓名。"); return; }
+
+  const duplicate = allGuests().find(g => g.name.trim().toLowerCase() === name.toLowerCase());
+  if(duplicate) {
+    alert("此姓名已存在，請直接使用名單內的賓客："+duplicate.name);
+    document.getElementById("guestSearch").value = name;
+    renderGuestOptions();
+    document.getElementById("guestSelect").value = duplicate.id;
+    showGuestInfo();
+    return;
+  }
+  if(side !== activeArea) {
+    alert("此賓客分類為「"+side+"」，目前是「"+activeArea+
+      "收禮區」。請切換到正確收禮區，不能跨區登記。");
+    return;
+  }
+
+  const guest = {
+    id:"manual_"+Date.now(),name,nickname,side,cake,manual:true
+  };
+  manualGuests.push(guest);
+  saveLocal();
+  selectedManualGuest = guest;
+
+  document.getElementById("guestSelect").value = "";
+  document.getElementById("guestInfo").classList.remove("hidden");
+  document.getElementById("guestInfo").textContent =
+    "已選擇現場新增賓客："+name+"｜分類："+side+"｜現場新增";
+  showCakeReminder(guest);
+  document.getElementById("manualPanel").classList.add("hidden");
+  document.getElementById("registerMessage").textContent =
+    "已暫存在本機，請填入金額後確認登記。";
+  renderAll();
+}
+function registerGift() {
+  const guest = selectedManualGuest || findGuest(document.getElementById("guestSelect").value);
+  const amountText = document.getElementById("giftAmount").value;
+  const amount = Number(amountText);
+  const note = document.getElementById("giftNote").value.trim();
+  const message = document.getElementById("registerMessage");
+
+  if(!guest) { alert("請先選擇賓客，或使用手動新增。"); return; }
+  if(guest.side !== activeArea) {
+    alert("賓客分類與目前收禮區不同，不能跨區登記。");
+    return;
+  }
+  if(amountText === "" || !Number.isFinite(amount) || amount < 0) {
+    alert("請輸入有效的禮金金額。");
+    return;
+  }
+
+  if(guest.cake && !document.getElementById("cakeConfirmed").checked) {
+    alert("⚠️ 此賓客需要喜餅！請先勾選「我已確認此賓客需要喜餅」，再進行登記。");
+    document.getElementById("cakeConfirmArea").scrollIntoView({behavior:"smooth",block:"center"});
+    return;
+  }
+
+  const duplicate = records.find(r =>
+    String(r.guestId) === String(guest.id) && r.registerArea === activeArea
+  );
+  if(duplicate && !confirm("此賓客在目前收禮區已有登記紀錄，仍要再次登記嗎？")) return;
+
+  if(!confirm("請確認登記資料：\n姓名："+guest.name+
+    "\n分類："+guest.side+"\n收禮區："+activeArea+
+    "\n金額："+amount+"\n喜餅需求："+(guest.cake?"需要":"不需要")+
+    "\n確定登記嗎？")) return;
+
+  const record = {
+    guestId:guest.id,name:guest.name,side:guest.side,
+    registerArea:activeArea,cake:!!guest.cake,amount,note,
+    date:new Date().toISOString(),serial:"WG-"+Date.now(),
+    syncStatus:"已送出請求"
+  };
+  records.unshift(record);
+  saveLocal();
+
+  fetch(GOOGLE_SCRIPT_URL,{
+    method:"POST",
+    mode:"no-cors",
+    headers:{"Content-Type":"text/plain;charset=UTF-8"},
+    body:JSON.stringify({action:"record",...record})
+  }).catch(()=>{});
+
+  message.className = "status info";
+  message.textContent =
+    "本機已保存紀錄，並已送出 Google 試算表寫入請求。請至「禮金紀錄」工作表確認是否收到。";
+
+  document.getElementById("giftAmount").value = "";
+  document.getElementById("giftNote").value = "";
+  selectedManualGuest = null;
+  document.getElementById("guestSelect").value = "";
+  document.getElementById("guestInfo").classList.add("hidden");
+  clearCakeReminder();
+  renderAll();
+}
+function renderRecords() {
+  const query = document.getElementById("recordSearch").value.trim().toLowerCase();
+  const side = document.getElementById("recordSide").value;
+  const area = document.getElementById("recordArea").value;
+  const list = records.filter(r =>
+    (!query || (r.name+" "+(r.note||"")).toLowerCase().includes(query)) &&
+    (!side || r.side === side) && (!area || r.registerArea === area)
+  );
+  document.getElementById("recordsBody").innerHTML = list.map(r => `
+    <tr><td>${escapeHTML(new Date(r.date).toLocaleString("zh-TW"))}</td>
+    <td>${escapeHTML(r.name)}</td><td>${escapeHTML(r.side)}</td>
+    <td>${escapeHTML(r.registerArea)}</td>
+    <td class="money">${Number(r.amount).toLocaleString("zh-TW")}</td>
+    <td>${escapeHTML(r.note||"")}</td><td>${escapeHTML(r.syncStatus||"本機紀錄")}</td></tr>
+  `).join("") || '<tr><td colspan="7">目前沒有符合條件的紀錄。</td></tr>';
+}
+function getCakeSent() { return readJSON(CAKE_KEY,{}); }
+function setCakeSent(id,sent) {
+  const state = getCakeSent();
+  state[id] = sent;
+  localStorage.setItem(CAKE_KEY,JSON.stringify(state));
+  renderAll();
+}
+function renderCakes() {
+  const query = document.getElementById("cakeSearch").value.trim().toLowerCase();
+  const side = document.getElementById("cakeSide").value;
+  const status = document.getElementById("cakeStatus").value;
+  const sentState = getCakeSent();
+  const list = allGuests().filter(g => {
+    const sent = !!sentState[g.id];
+    return g.cake &&
+      (!query || (g.name+" "+(g.nickname||"")).toLowerCase().includes(query)) &&
+      (!side || g.side === side) &&
+      (!status || (status === "sent" ? sent : !sent));
+  });
+  document.getElementById("cakesBody").innerHTML = list.map(g => {
+    const sent = !!sentState[g.id];
+    return `<tr><td>${escapeHTML(g.name)}${g.manual?' <span class="tag">現場新增</span>':""}</td>
+      <td>${escapeHTML(g.nickname||"")}</td><td>${escapeHTML(g.side)}</td><td>需要</td>
+      <td>${sent?'<span class="tag">已發送</span>':'<span class="tag">未發送</span>'}</td>
+      <td><button class="${sent?"secondary":""}" onclick="setCakeSent('${escapeHTML(g.id)}',${!sent})">${sent?"改為未發送":"標記已發送"}</button></td></tr>`;
+  }).join("") || '<tr><td colspan="6">目前沒有符合條件的喜餅紀錄。</td></tr>';
+}
+function renderAll() {
+  document.getElementById("guestCount").textContent = allGuests().length;
+  document.getElementById("recordCount").textContent = records.length;
+  document.getElementById("totalAmount").textContent = "$"+
+    records.reduce((sum,r)=>sum+Number(r.amount||0),0).toLocaleString("zh-TW");
+  document.getElementById("cakeCount").textContent =
+    Object.values(getCakeSent()).filter(Boolean).length;
+  renderRecords();
+  renderCakes();
+}
+function downloadFile(filename,content,type) {
+  const blob = new Blob(["\uFEFF"+content],{type:type||"text/plain;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;a.download = filename;a.click();
+  URL.revokeObjectURL(url);
+}
+function csvCell(value) {
+  return '"'+String(value??"").replace(/"/g,'""')+'"';
+}
+function exportRecords() {
+  const rows = [["登記時間","編號","姓名","分類","收禮區","金額","喜餅需求","備註"],
+    ...records.map(r=>[new Date(r.date).toLocaleString("zh-TW"),r.serial,r.name,r.side,
+      r.registerArea,r.amount,r.cake?"需要":"不需要",r.note||""])];
+  downloadFile("婚禮禮金紀錄.csv",rows.map(r=>r.map(csvCell).join(",")).join("\r\n"),"text/csv;charset=utf-8");
+}
+function exportCakes() {
+  const sent = getCakeSent();
+  const rows = [["姓名","暱稱","分類","喜餅需求","發送狀態","現場新增"],
+    ...allGuests().filter(g=>g.cake).map(g=>[g.name,g.nickname||"",g.side,"需要",
+      sent[g.id]?"已發送":"未發送",g.manual?"是":"否"])];
+  downloadFile("婚禮喜餅紀錄.csv",rows.map(r=>r.map(csvCell).join(",")).join("\r\n"),"text/csv;charset=utf-8");
+}
+function downloadBackup() {
+  const backup = {version:1,exportedAt:new Date().toISOString(),
+    records,manualGuests,cakeSent:getCakeSent()};
+  downloadFile("婚禮禮金備份.json",JSON.stringify(backup,null,2),"application/json;charset=utf-8");
+}
+function restoreBackup() {
+  const file = document.getElementById("restoreFile").files[0];
+  if(!file) { alert("請先選擇 JSON 備份檔。");return; }
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const backup = JSON.parse(reader.result);
+      if(!backup || !Array.isArray(backup.records) || !Array.isArray(backup.manualGuests))
+        throw new Error("檔案格式不正確");
+      if(!confirm("還原會取代目前瀏覽器的紀錄、手動新增賓客及喜餅狀態，確定繼續嗎？")) return;
+      records = backup.records;
+      manualGuests = backup.manualGuests;
+      localStorage.setItem(CAKE_KEY,JSON.stringify(backup.cakeSent||{}));
+      saveLocal();renderGuestOptions();renderAll();
+      alert("還原完成。Google 試算表正式名單不會被覆蓋。");
+    } catch(e) { alert("還原失敗："+e.message); }
+  };
+  reader.readAsText(file);
+}
 </script>
 </body>
 </html>
