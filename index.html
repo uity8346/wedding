@@ -6,36 +6,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>婚禮禮金管理系統</title>
 <style>
-:root {
-  --pink:#b76e79;
-  --pink-light:#fff0f2;
-  --ink:#3d3435;
-  --muted:#766b6c;
-  --border:#eadfe1;
-  --green:#176437;
-  --red:#a40000;
-}
+:root{--pink:#b76e79;--pink-light:#fff0f2;--ink:#3d3435;--muted:#766b6c;--border:#eadfe1}
 *{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC",
-  "Microsoft JhengHei",sans-serif;
-  color:var(--ink);
-  background:#fffafb;
-  line-height:1.6
-}
-header{
-  background:linear-gradient(135deg,#b76e79,#d49aa1);
-  color:white;padding:24px 16px;text-align:center
-}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:#fffafb;line-height:1.6}
+header{background:linear-gradient(135deg,#b76e79,#d49aa1);color:white;padding:24px 16px;text-align:center}
 header h1{margin:0 0 6px;font-size:25px}
 header p{margin:0;font-size:14px}
 main{max-width:1050px;margin:auto;padding:16px}
-.card{
-  background:white;border:1px solid var(--border);
-  border-radius:14px;padding:18px;margin-bottom:16px;
-  box-shadow:0 3px 12px #7c45500b
-}
+.card{background:white;border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:16px;box-shadow:0 3px 12px #7c45500b}
 h2{font-size:19px;margin:0 0 14px}
 h3{font-size:16px;margin:14px 0 8px}
 .muted{color:var(--muted);font-size:13px}
@@ -43,25 +21,14 @@ h3{font-size:16px;margin:14px 0 8px}
 .status.info{background:#f3f4f7}
 .status.ok{background:#eaf7ef;color:#256943}
 .status.error{background:#fff0f0;color:#a52e2e}
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:12px
-}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
 .stat{background:var(--pink-light);border-radius:12px;padding:15px}
 .stat strong{display:block;font-size:24px;color:var(--pink)}
 .stat span{font-size:13px}
 label{display:block;font-size:14px;margin:10px 0 5px}
-input,select,textarea{
-  width:100%;border:1px solid #d9cdcf;border-radius:9px;
-  padding:11px;background:white;color:var(--ink);font:inherit
-}
+input,select,textarea{width:100%;border:1px solid #d9cdcf;border-radius:9px;padding:11px;background:white;color:var(--ink);font:inherit}
 textarea{min-height:70px;resize:vertical}
-button{
-  border:0;border-radius:9px;padding:10px 14px;
-  background:var(--pink);color:white;cursor:pointer;
-  font:inherit;margin:4px 4px 4px 0
-}
+button{border:0;border-radius:9px;padding:10px 14px;background:var(--pink);color:white;cursor:pointer;font:inherit;margin:4px 4px 4px 0}
 button.secondary{background:#f2e7e9;color:#71464d}
 button.danger{background:#a94444}
 button:disabled{opacity:.5;cursor:not-allowed}
@@ -74,59 +41,27 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .hidden{display:none!important}
 .table-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:14px}
-th,td{
-  padding:10px 8px;border-bottom:1px solid var(--border);
-  text-align:left
-}
+th,td{padding:10px 8px;border-bottom:1px solid var(--border);text-align:left}
 th{background:#fff6f7;white-space:nowrap}
-.tag{
-  display:inline-block;padding:2px 8px;border-radius:99px;
-  background:#f5e8ea;font-size:12px
-}
+.tag{display:inline-block;padding:2px 8px;border-radius:99px;background:#f5e8ea;font-size:12px}
 .money{color:var(--pink);font-weight:bold}
 footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
-
-/* 喜餅需求醒目提醒 */
-.cake-alert{
-  margin:16px 0;padding:20px 14px;
-  border:3px solid #d62828;border-radius:14px;
-  background:#fff0f0;color:#a40000;
-  font-size:25px;font-weight:900;text-align:center;
-  box-shadow:0 0 0 4px #d628281c;
-  animation:cake-pulse 1.2s ease-in-out infinite alternate
-}
-.cake-alert small{
-  display:block;margin-top:7px;font-size:15px;font-weight:700
-}
-.cake-no{
-  margin:14px 0;padding:15px;
-  border:2px solid #27824b;border-radius:12px;
-  background:#edfff3;color:#176437;
-  font-size:19px;font-weight:800;text-align:center
-}
-.cake-confirm{
-  margin:14px 0;padding:12px;border:2px solid #d62828;
-  background:#fff8f8;border-radius:10px
-}
-@keyframes cake-pulse{
-  from{transform:scale(1)}
-  to{transform:scale(1.015)}
-}
-@media(prefers-reduced-motion:reduce){
-  .cake-alert{animation:none}
-}
-@media(max-width:600px){
-  main{padding:10px}
-  .card{padding:14px}
-  header h1{font-size:21px}
-  .cake-alert{font-size:22px}
-}
+.area-indicator{display:inline-block;margin:8px 0;padding:10px 16px;border-radius:10px;font-size:20px;font-weight:900;border:2px solid;line-height:1.5}
+.area-indicator.male{color:#084298;background:#cfe2ff;border-color:#0d6efd}
+.area-indicator.female{color:#842029;background:#f8d7da;border-color:#dc3545}
+.cake-alert{margin:16px 0;padding:20px 14px;border:3px solid #d62828;border-radius:14px;background:#fff0f0;color:#a40000;font-size:25px;font-weight:900;text-align:center;box-shadow:0 0 0 4px #d628281c;animation:cake-pulse 1.2s ease-in-out infinite alternate}
+.cake-alert small{display:block;margin-top:7px;font-size:15px;font-weight:700}
+.cake-no{margin:14px 0;padding:15px;border:2px solid #27824b;border-radius:12px;background:#edfff3;color:#176437;font-size:19px;font-weight:800;text-align:center}
+.cake-confirm{margin:14px 0;padding:12px;border:2px solid #d62828;background:#fff8f8;border-radius:10px}
+@keyframes cake-pulse{from{transform:scale(1)}to{transform:scale(1.015)}}
+@media(prefers-reduced-motion:reduce){.cake-alert{animation:none}}
+@media(max-width:600px){main{padding:10px}.card{padding:14px}header h1{font-size:21px}.cake-alert{font-size:22px}.area-indicator{font-size:19px}}
 </style>
 </head>
 <body>
 <header>
   <h1>💐 婚禮禮金管理系統</h1>
-  <p>Google 試算表名單同步｜醒目喜餅提醒</p>
+  <p>Google 試算表名單同步｜喜餅狀態同步</p>
 </header>
 
 <main>
@@ -145,7 +80,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
   <div class="card">
     <div class="row">
       <div>
-        <strong>目前收禮區：<span id="activeAreaText"></span></strong>
+        <div id="activeAreaIndicator" class="area-indicator male">🔵 目前收禮區：男方</div>
         <div class="muted">請確認收禮區正確再進行登記。</div>
       </div>
       <button class="secondary" onclick="switchArea()">切換收禮區</button>
@@ -153,6 +88,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
     </div>
     <div id="connectionStatus" class="status info">尚未讀取名單</div>
     <button class="secondary" onclick="loadGuests()">重新讀取賓客名單</button>
+    <button class="secondary" onclick="loadRecords()">同步禮金及喜餅紀錄</button>
     <span class="muted" id="lastLoaded"></span>
   </div>
 
@@ -173,7 +109,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
         <div class="stat"><span>禮金總額</span><strong id="totalAmount">$0</strong></div>
         <div class="stat"><span>已發送喜餅</span><strong id="cakeCount">0</strong></div>
       </div>
-      <p class="muted">正式名單來自 Google 試算表；本機紀錄仍需定期備份。</p>
+      <p class="muted">禮金及喜餅狀態以 Google 試算表「禮金紀錄」為同步來源。</p>
     </div>
   </section>
 
@@ -201,28 +137,19 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
         <label for="manualNickname">暱稱（選填）</label>
         <input id="manualNickname" placeholder="請輸入暱稱">
         <label for="manualSide">賓客分類</label>
-        <select id="manualSide">
-          <option value="男方">男方</option>
-          <option value="女方">女方</option>
-        </select>
+        <select id="manualSide"><option value="男方">男方</option><option value="女方">女方</option></select>
         <label for="manualCake">喜餅需求</label>
-        <select id="manualCake">
-          <option value="true">需要</option>
-          <option value="false">不需要</option>
-        </select>
+        <select id="manualCake"><option value="true">需要</option><option value="false">不需要</option></select>
         <button onclick="useManualGuest()">確認這位賓客</button>
       </div>
 
       <label for="giftAmount">禮金金額（必填）</label>
       <input id="giftAmount" type="number" min="0" step="1" placeholder="例如：3600">
-
       <label for="giftNote">備註（選填）</label>
       <textarea id="giftNote" placeholder="例如：同事、親友代包等"></textarea>
 
       <div id="cakeConfirmArea" class="hidden cake-confirm">
-        <div style="font-weight:900;color:#a40000;font-size:18px">
-          ⚠️ 喜餅防漏發確認
-        </div>
+        <div style="font-weight:900;color:#a40000;font-size:18px">⚠️ 喜餅防漏發確認</div>
         <p style="margin:6px 0">這位賓客需要喜餅，登記前請確認現場人員已注意到。</p>
         <label style="display:flex;align-items:center;gap:8px;font-weight:700">
           <input type="checkbox" id="cakeConfirmed" style="width:auto">
@@ -250,30 +177,32 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
       <button onclick="exportRecords()">匯出禮金紀錄 CSV</button>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>時間</th><th>姓名</th><th>分類</th><th>收禮區</th><th>金額</th><th>備註</th><th>同步狀態</th></tr></thead>
+          <thead><tr><th>時間</th><th>姓名</th><th>分類</th><th>收禮區</th><th>金額</th><th>喜餅需求</th><th>喜餅發送狀態</th><th>備註</th><th>同步狀態</th></tr></thead>
           <tbody id="recordsBody"></tbody>
         </table>
       </div>
-      <p class="muted">「已送出請求」不代表 Google 已確認寫入，請到試算表確認。</p>
+      <p class="muted">重新讀取後會以 Google 試算表資料更新畫面。</p>
     </div>
   </section>
 
   <section class="tab hidden" id="tab-cakes">
     <div class="card">
       <h2>喜餅管理</h2>
+      <p class="muted">此頁只顯示「禮金紀錄」中有喜餅需求的登記。修改狀態會更新同一筆禮金紀錄。</p>
       <div class="row">
-        <input id="cakeSearch" placeholder="搜尋姓名或暱稱" oninput="renderCakes()">
+        <input id="cakeSearch" placeholder="搜尋姓名" oninput="renderCakes()">
         <select id="cakeSide" onchange="renderCakes()">
           <option value="">全部分類</option><option value="男方">男方</option><option value="女方">女方</option>
         </select>
         <select id="cakeStatus" onchange="renderCakes()">
-          <option value="">全部狀態</option><option value="sent">已發送</option><option value="unsent">未發送</option>
+          <option value="">全部狀態</option><option value="已發送">已發送</option><option value="未發送">未發送</option>
         </select>
       </div>
+      <button onclick="loadRecords()">重新同步喜餅狀態</button>
       <button onclick="exportCakes()">匯出喜餅紀錄 CSV</button>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>姓名</th><th>暱稱</th><th>分類</th><th>需求</th><th>發送狀態</th><th>操作</th></tr></thead>
+          <thead><tr><th>時間</th><th>姓名</th><th>分類</th><th>收禮區</th><th>需求</th><th>發送狀態</th><th>操作</th></tr></thead>
           <tbody id="cakesBody"></tbody>
         </table>
       </div>
@@ -283,7 +212,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
   <section class="tab hidden" id="tab-backup">
     <div class="card">
       <h2>備份與還原</h2>
-      <p class="muted">備份包含本機禮金紀錄、現場新增賓客及喜餅發送狀態。</p>
+      <p class="muted">備份包含目前瀏覽器的禮金紀錄與現場新增賓客。Google 試算表的喜餅狀態仍以試算表為準。</p>
       <button onclick="downloadBackup()">下載 JSON 備份</button>
       <label for="restoreFile">選擇 JSON 備份檔</label>
       <input id="restoreFile" type="file" accept=".json,application/json">
@@ -301,13 +230,13 @@ const GOOGLE_SCRIPT_URL =
 
 const STORAGE_KEY = "wedding_gift_manager_v3";
 const MANUAL_KEY = "wedding_gift_manual_guests_v1";
-const CAKE_KEY = "wedding_gift_cake_sent_v1";
 
 let activeArea = "";
 let guests = [];
 let manualGuests = readJSON(MANUAL_KEY, []);
 let records = readJSON(STORAGE_KEY, []);
 let selectedManualGuest = null;
+let loadingRecords = false;
 
 function readJSON(key, fallback) {
   try {
@@ -324,28 +253,32 @@ function escapeHTML(value) {
     "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
   })[c]);
 }
-
-/* 共用跨區檢查：賓客分類必須與目前登入收禮區相同 */
+function updateAreaIndicator() {
+  const el = document.getElementById("activeAreaIndicator");
+  const male = activeArea === "男方";
+  el.className = "area-indicator " + (male ? "male" : "female");
+  el.textContent = (male ? "🔵 " : "🔴 ") + "目前收禮區：" + activeArea;
+}
 function isGuestInActiveArea(guest) {
   return !!guest && !!activeArea && guest.side === activeArea;
 }
 function showAreaMismatch(guest) {
   const info = document.getElementById("guestInfo");
-  info.classList.remove("hidden");
   info.className = "status error";
+  info.classList.remove("hidden");
   info.textContent =
     "⛔ 跨區登記禁止！此賓客屬於「" + guest.side +
     "」，目前登入的是「" + activeArea +
     "收禮區」，不能登記。請賓客致「" + guest.side +
     "收禮區」。";
 }
-
 function login() {
   activeArea = document.getElementById("areaSelect").value;
   document.getElementById("loginPanel").classList.add("hidden");
   document.getElementById("appPanel").classList.remove("hidden");
-  document.getElementById("activeAreaText").textContent = activeArea;
+  updateAreaIndicator();
   loadGuests();
+  loadRecords();
   renderAll();
 }
 function logout() {
@@ -355,10 +288,9 @@ function logout() {
   document.getElementById("loginPanel").classList.remove("hidden");
 }
 function switchArea() {
-  document.getElementById("areaSelect").value =
-    activeArea === "男方" ? "女方" : "男方";
+  document.getElementById("areaSelect").value = activeArea === "男方" ? "女方" : "男方";
   activeArea = document.getElementById("areaSelect").value;
-  document.getElementById("activeAreaText").textContent = activeArea;
+  updateAreaIndicator();
   selectedManualGuest = null;
   document.getElementById("guestSelect").value = "";
   document.getElementById("guestInfo").classList.add("hidden");
@@ -370,7 +302,7 @@ function showTab(name, button) {
   document.querySelectorAll(".tab").forEach(el => el.classList.add("hidden"));
   document.getElementById("tab-" + name).classList.remove("hidden");
   document.querySelectorAll(".nav button").forEach(el => el.classList.remove("active"));
-  if(button) button.classList.add("active");
+  if (button) button.classList.add("active");
   renderAll();
 }
 function setConnection(message, type) {
@@ -378,51 +310,101 @@ function setConnection(message, type) {
   el.textContent = message;
   el.className = "status " + (type || "info");
 }
-function loadGuests() {
-  setConnection("正在讀取 Google 試算表名單……","info");
-  const callbackName = "guestCallback_" + Date.now() + "_" + Math.floor(Math.random()*100000);
+function jsonp(action, callback) {
+  const callbackName = "weddingCallback_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
   const script = document.createElement("script");
   let finished = false;
+
   const cleanup = () => {
     try { delete window[callbackName]; } catch(e) { window[callbackName] = undefined; }
-    if(script.parentNode) script.parentNode.removeChild(script);
+    if (script.parentNode) script.parentNode.removeChild(script);
   };
+
   const timer = setTimeout(() => {
-    if(finished) return;
+    if (finished) return;
     finished = true;
     cleanup();
-    setConnection("讀取逾時，請確認 Apps Script 部署網址與權限。","error");
-  },20000);
+    callback(new Error("讀取逾時"), null);
+  }, 20000);
+
   window[callbackName] = result => {
-    if(finished) return;
+    if (finished) return;
     finished = true;
     clearTimeout(timer);
     cleanup();
-    if(!result || !result.ok) {
-      setConnection("讀取失敗："+(result?.error || "資料格式不正確"),"error");
+    callback(null, result);
+  };
+
+  script.onerror = () => {
+    if (finished) return;
+    finished = true;
+    clearTimeout(timer);
+    cleanup();
+    callback(new Error("無法連線，請檢查 Apps Script 網址及部署權限"), null);
+  };
+
+  script.src = GOOGLE_SCRIPT_URL + "?action=" + encodeURIComponent(action) +
+    "&callback=" + encodeURIComponent(callbackName) + "&_=" + Date.now();
+  document.body.appendChild(script);
+}
+function loadGuests() {
+  setConnection("正在讀取 Google 試算表名單……", "info");
+  jsonp("guests", (err, result) => {
+    if (err) {
+      setConnection(err.message, "error");
+      return;
+    }
+    if (!result || !result.ok) {
+      setConnection("讀取名單失敗：" + (result?.error || "資料格式不正確"), "error");
       return;
     }
     guests = Array.isArray(result.guests) ? result.guests : [];
     document.getElementById("lastLoaded").textContent =
-      "最後讀取："+new Date().toLocaleString("zh-TW");
-    setConnection("已讀取 Google 試算表，共 "+guests.length+" 位賓客。","ok");
+      "最後同步：" + new Date().toLocaleString("zh-TW");
+    setConnection("已讀取 Google 試算表，共 " + guests.length + " 位賓客。", "ok");
     renderGuestOptions();
     renderAll();
-  };
-  script.onerror = () => {
-    if(finished) return;
-    finished = true;
-    clearTimeout(timer);
-    cleanup();
-    setConnection("無法連線，請檢查 Apps Script 網址與部署設定。","error");
-  };
-  script.src = GOOGLE_SCRIPT_URL+"?action=guests&callback="+
-    encodeURIComponent(callbackName)+"&_="+Date.now();
-  document.body.appendChild(script);
+  });
+}
+function loadRecords() {
+  if (loadingRecords) return;
+  loadingRecords = true;
+
+  jsonp("records", (err, result) => {
+    loadingRecords = false;
+
+    if (err) {
+      setConnection("讀取禮金紀錄失敗：" + err.message, "error");
+      return;
+    }
+    if (!result || !result.ok) {
+      setConnection("讀取禮金紀錄失敗：" + (result?.error || "資料格式不正確"), "error");
+      return;
+    }
+
+    records = Array.isArray(result.records) ? result.records : [];
+    saveLocal();
+    document.getElementById("lastLoaded").textContent =
+      "最後同步：" + new Date().toLocaleString("zh-TW");
+    setConnection("禮金紀錄及喜餅狀態已同步，共 " + records.length + " 筆。", "ok");
+    renderAll();
+  });
+}
+function postData(payload, callback) {
+  fetch(GOOGLE_SCRIPT_URL, {
+    method: "POST",
+    mode: "no-cors",
+    headers: {"Content-Type": "text/plain;charset=UTF-8"},
+    body: JSON.stringify(payload)
+  }).then(() => {
+    if (callback) callback();
+  }).catch(err => {
+    if (callback) callback(err);
+  });
 }
 function allGuests() {
   const ids = new Set(guests.map(g => String(g.id)));
-  return [...guests,...manualGuests.filter(g => !ids.has(String(g.id)))];
+  return [...guests, ...manualGuests.filter(g => !ids.has(String(g.id)))];
 }
 function findGuest(id) {
   return allGuests().find(g => String(g.id) === String(id));
@@ -432,11 +414,13 @@ function renderGuestOptions() {
   const query = document.getElementById("guestSearch").value.trim().toLowerCase();
   const current = select.value;
   const list = allGuests().filter(g =>
-    (g.name+" "+(g.nickname || "")).toLowerCase().includes(query)
+    (g.name + " " + (g.nickname || "")).toLowerCase().includes(query)
   );
+
   select.innerHTML = '<option value="">請選擇賓客</option>' +
-    list.map(g => `<option value="${escapeHTML(g.id)}">${escapeHTML(g.name)}${g.manual?"（現場新增）":""}${g.nickname?"｜"+escapeHTML(g.nickname):""}｜${escapeHTML(g.side)}</option>`).join("");
-  if(list.some(g => String(g.id) === current)) select.value = current;
+    list.map(g => `<option value="${escapeHTML(g.id)}">${escapeHTML(g.name)}${g.manual ? "（現場新增）" : ""}${g.nickname ? "｜" + escapeHTML(g.nickname) : ""}｜${escapeHTML(g.side)}</option>`).join("");
+
+  if (list.some(g => String(g.id) === current)) select.value = current;
   showGuestInfo();
 }
 function clearCakeReminder() {
@@ -451,11 +435,9 @@ function showCakeReminder(guest) {
   const confirmArea = document.getElementById("cakeConfirmArea");
   document.getElementById("cakeConfirmed").checked = false;
 
-  if(guest.cake) {
+  if (guest.cake) {
     reminder.className = "cake-alert";
-    reminder.innerHTML =
-      "🎁 ⚠️ 此賓客需要喜餅！"+
-      "<small>請記得確認喜餅並完成發送，避免漏發！</small>";
+    reminder.innerHTML = "🎁 ⚠️ 此賓客需要喜餅！<small>請確認喜餅並完成發送，避免漏發！</small>";
     confirmArea.classList.remove("hidden");
   } else {
     reminder.className = "cake-no";
@@ -467,7 +449,7 @@ function showGuestInfo() {
   const guest = findGuest(document.getElementById("guestSelect").value);
   const info = document.getElementById("guestInfo");
 
-  if(!guest) {
+  if (!guest) {
     info.classList.add("hidden");
     clearCakeReminder();
     selectedManualGuest = null;
@@ -475,9 +457,7 @@ function showGuestInfo() {
   }
 
   selectedManualGuest = null;
-
-  /* 選到不同方別時，立即顯示紅色警告 */
-  if(!isGuestInActiveArea(guest)) {
+  if (!isGuestInActiveArea(guest)) {
     clearCakeReminder();
     showAreaMismatch(guest);
     return;
@@ -485,8 +465,8 @@ function showGuestInfo() {
 
   info.className = "status info";
   info.classList.remove("hidden");
-  info.textContent = "姓名："+guest.name+"｜分類："+guest.side+
-    (guest.manual?"｜現場新增":"");
+  info.textContent = "姓名：" + guest.name + "｜分類：" + guest.side +
+    (guest.manual ? "｜現場新增" : "");
   showCakeReminder(guest);
 }
 function toggleManual() {
@@ -498,11 +478,14 @@ function useManualGuest() {
   const side = document.getElementById("manualSide").value;
   const cake = document.getElementById("manualCake").value === "true";
 
-  if(!name) { alert("請先輸入賓客姓名。"); return; }
+  if (!name) {
+    alert("請先輸入賓客姓名。");
+    return;
+  }
 
   const duplicate = allGuests().find(g => g.name.trim().toLowerCase() === name.toLowerCase());
-  if(duplicate) {
-    alert("此姓名已存在，請直接使用名單內的賓客："+duplicate.name);
+  if (duplicate) {
+    alert("此姓名已存在，請直接使用名單內的賓客：" + duplicate.name);
     document.getElementById("guestSearch").value = name;
     renderGuestOptions();
     document.getElementById("guestSelect").value = duplicate.id;
@@ -510,17 +493,17 @@ function useManualGuest() {
     return;
   }
 
-  /* 手動新增也必須符合目前登入的收禮區 */
-  if(side !== activeArea) {
-    alert("⛔ 跨區登記禁止！你目前在「"+activeArea+
-      "收禮區」，不能新增分類為「"+side+
-      "」的賓客。請切換到正確收禮區再操作。");
+  if (side !== activeArea) {
+    alert("⛔ 跨區登記禁止！目前是「" + activeArea +
+      "收禮區」，不能新增分類為「" + side + "」的賓客。");
     return;
   }
 
   const guest = {
-    id:"manual_"+Date.now(),name,nickname,side,cake,manual:true
+    id: "manual_" + Date.now(),
+    name, nickname, side, cake, manual: true
   };
+
   manualGuests.push(guest);
   saveLocal();
   selectedManualGuest = guest;
@@ -529,7 +512,8 @@ function useManualGuest() {
   document.getElementById("guestInfo").className = "status info";
   document.getElementById("guestInfo").classList.remove("hidden");
   document.getElementById("guestInfo").textContent =
-    "已選擇現場新增賓客："+name+"｜分類："+side+"｜現場新增";
+    "已選擇現場新增賓客：" + name + "｜分類：" + side + "｜現場新增";
+
   showCakeReminder(guest);
   document.getElementById("manualPanel").classList.add("hidden");
   document.getElementById("registerMessage").textContent =
@@ -543,57 +527,76 @@ function registerGift() {
   const note = document.getElementById("giftNote").value.trim();
   const message = document.getElementById("registerMessage");
 
-  if(!guest) { alert("請先選擇賓客，或使用手動新增。"); return; }
-
-  /* 最後一道防線：不論如何選取，都禁止跨區登記 */
-  if(!isGuestInActiveArea(guest)) {
-    showAreaMismatch(guest);
-    alert("⛔ 登記失敗！目前是「"+activeArea+
-      "收禮區」，只能登記「"+activeArea+
-      "」賓客，不能登記「"+guest.side+"」賓客。");
+  if (!guest) {
+    alert("請先選擇賓客，或使用手動新增。");
     return;
   }
 
-  if(amountText === "" || !Number.isFinite(amount) || amount < 0) {
+  if (!isGuestInActiveArea(guest)) {
+    showAreaMismatch(guest);
+    alert("⛔ 登記失敗！只能登記目前「" + activeArea + "」收禮區的賓客。");
+    return;
+  }
+
+  if (amountText === "" || !Number.isFinite(amount) || amount < 0) {
     alert("請輸入有效的禮金金額。");
     return;
   }
 
-  if(guest.cake && !document.getElementById("cakeConfirmed").checked) {
+  const confirmed = document.getElementById("cakeConfirmed").checked;
+  if (guest.cake && !confirmed) {
     alert("⚠️ 此賓客需要喜餅！請先勾選「我已確認此賓客需要喜餅」，再進行登記。");
     document.getElementById("cakeConfirmArea").scrollIntoView({behavior:"smooth",block:"center"});
     return;
   }
 
   const duplicate = records.find(r =>
-    String(r.guestId) === String(guest.id) && r.registerArea === activeArea
+    r.name === guest.name && r.side === guest.side && r.registerArea === activeArea
   );
-  if(duplicate && !confirm("此賓客在目前收禮區已有登記紀錄，仍要再次登記嗎？")) return;
+  if (duplicate && !confirm("此賓客在目前收禮區已有登記紀錄，仍要再次登記嗎？")) return;
 
-  if(!confirm("請確認登記資料：\n姓名："+guest.name+
-    "\n分類："+guest.side+"\n收禮區："+activeArea+
-    "\n金額："+amount+"\n喜餅需求："+(guest.cake?"需要":"不需要")+
-    "\n確定登記嗎？")) return;
+  const cakeStatus = guest.cake ? "已發送" : "不需要";
+
+  if (!confirm("請確認登記資料：\n姓名：" + guest.name +
+    "\n分類：" + guest.side + "\n收禮區：" + activeArea +
+    "\n金額：" + amount + "\n喜餅需求：" + (guest.cake ? "需要" : "不需要") +
+    "\n喜餅發送狀態：" + cakeStatus + "\n確定登記嗎？")) return;
 
   const record = {
-    guestId:guest.id,name:guest.name,side:guest.side,
-    registerArea:activeArea,cake:!!guest.cake,amount,note,
-    date:new Date().toISOString(),serial:"WG-"+Date.now(),
-    syncStatus:"已送出請求"
+    name: guest.name,
+    side: guest.side,
+    registerArea: activeArea,
+    cake: !!guest.cake,
+    cakeStatus,
+    amount,
+    note,
+    date: new Date().toISOString(),
+    serial: "WG-" + Date.now(),
+    syncStatus: "待同步"
   };
+
   records.unshift(record);
   saveLocal();
-
-  fetch(GOOGLE_SCRIPT_URL,{
-    method:"POST",
-    mode:"no-cors",
-    headers:{"Content-Type":"text/plain;charset=UTF-8"},
-    body:JSON.stringify({action:"record",...record})
-  }).catch(()=>{});
+  renderAll();
 
   message.className = "status info";
-  message.textContent =
-    "本機已保存紀錄，並已送出 Google 試算表寫入請求。請至「禮金紀錄」工作表確認是否收到。";
+  message.textContent = "已送出寫入請求，正在同步 Google 試算表……";
+
+  postData({action:"record", ...record}, err => {
+    if (err) {
+      message.className = "status error";
+      message.textContent = "送出請求時發生錯誤，請檢查網路後重新同步。";
+      return;
+    }
+
+    message.className = "status info";
+    message.textContent = "已送出 Google 寫入請求，正在重新讀取試算表確認資料。";
+
+    setTimeout(() => {
+      loadRecords();
+      message.textContent = "已重新讀取 Google 試算表。請確認登記紀錄內有這筆資料。";
+    }, 1200);
+  });
 
   document.getElementById("giftAmount").value = "";
   document.getElementById("giftNote").value = "";
@@ -601,105 +604,180 @@ function registerGift() {
   document.getElementById("guestSelect").value = "";
   document.getElementById("guestInfo").classList.add("hidden");
   clearCakeReminder();
-  renderAll();
 }
 function renderRecords() {
   const query = document.getElementById("recordSearch").value.trim().toLowerCase();
   const side = document.getElementById("recordSide").value;
   const area = document.getElementById("recordArea").value;
+
   const list = records.filter(r =>
-    (!query || (r.name+" "+(r.note||"")).toLowerCase().includes(query)) &&
-    (!side || r.side === side) && (!area || r.registerArea === area)
+    (!query || (r.name + " " + (r.note || "")).toLowerCase().includes(query)) &&
+    (!side || r.side === side) &&
+    (!area || r.registerArea === area)
   );
+
   document.getElementById("recordsBody").innerHTML = list.map(r => `
-    <tr><td>${escapeHTML(new Date(r.date).toLocaleString("zh-TW"))}</td>
-    <td>${escapeHTML(r.name)}</td><td>${escapeHTML(r.side)}</td>
-    <td>${escapeHTML(r.registerArea)}</td>
-    <td class="money">${Number(r.amount).toLocaleString("zh-TW")}</td>
-    <td>${escapeHTML(r.note||"")}</td><td>${escapeHTML(r.syncStatus||"本機紀錄")}</td></tr>
-  `).join("") || '<tr><td colspan="7">目前沒有符合條件的紀錄。</td></tr>';
+    <tr>
+      <td>${escapeHTML(r.date ? new Date(r.date).toLocaleString("zh-TW") : "")}</td>
+      <td>${escapeHTML(r.name)}</td>
+      <td>${escapeHTML(r.side)}</td>
+      <td>${escapeHTML(r.registerArea)}</td>
+      <td class="money">${Number(r.amount || 0).toLocaleString("zh-TW")}</td>
+      <td>${escapeHTML(r.cake ? "需要" : "不需要")}</td>
+      <td>${escapeHTML(r.cakeStatus || (r.cake ? "未發送" : "不需要"))}</td>
+      <td>${escapeHTML(r.note || "")}</td>
+      <td>${escapeHTML(r.syncStatus || "Google 試算表")}</td>
+    </tr>
+  `).join("") || '<tr><td colspan="9">目前沒有符合條件的紀錄。</td></tr>';
 }
-function getCakeSent() { return readJSON(CAKE_KEY,{}); }
-function setCakeSent(id,sent) {
-  const state = getCakeSent();
-  state[id] = sent;
-  localStorage.setItem(CAKE_KEY,JSON.stringify(state));
-  renderAll();
+function setCakeSent(serial, sent) {
+  const record = records.find(r => String(r.serial) === String(serial));
+  if (!record) {
+    alert("找不到這筆紀錄，請先重新同步。");
+    return;
+  }
+
+  const status = sent ? "已發送" : "未發送";
+  if (!confirm("確定將「" + record.name + "」的喜餅狀態改為「" + status + "」嗎？")) return;
+
+  postData({
+    action: "updateCake",
+    serial: record.serial,
+    cakeStatus: status
+  }, err => {
+    if (err) {
+      alert("送出更新請求失敗，請檢查網路。");
+      return;
+    }
+    record.cakeStatus = status;
+    saveLocal();
+    renderAll();
+
+    setTimeout(() => {
+      loadRecords();
+      alert("已送出更新請求，已重新讀取 Google 試算表。請確認狀態已更新。");
+    }, 1200);
+  });
 }
 function renderCakes() {
   const query = document.getElementById("cakeSearch").value.trim().toLowerCase();
   const side = document.getElementById("cakeSide").value;
   const status = document.getElementById("cakeStatus").value;
-  const sentState = getCakeSent();
-  const list = allGuests().filter(g => {
-    const sent = !!sentState[g.id];
-    return g.cake &&
-      (!query || (g.name+" "+(g.nickname||"")).toLowerCase().includes(query)) &&
-      (!side || g.side === side) &&
-      (!status || (status === "sent" ? sent : !sent));
+
+  const list = records.filter(r => {
+    const cakeStatus = r.cakeStatus || (r.cake ? "未發送" : "不需要");
+    return r.cake &&
+      (!query || r.name.toLowerCase().includes(query)) &&
+      (!side || r.side === side) &&
+      (!status || cakeStatus === status);
   });
-  document.getElementById("cakesBody").innerHTML = list.map(g => {
-    const sent = !!sentState[g.id];
-    return `<tr><td>${escapeHTML(g.name)}${g.manual?' <span class="tag">現場新增</span>':""}</td>
-      <td>${escapeHTML(g.nickname||"")}</td><td>${escapeHTML(g.side)}</td><td>需要</td>
-      <td>${sent?'<span class="tag">已發送</span>':'<span class="tag">未發送</span>'}</td>
-      <td><button class="${sent?"secondary":""}" onclick="setCakeSent('${escapeHTML(g.id)}',${!sent})">${sent?"改為未發送":"標記已發送"}</button></td></tr>`;
-  }).join("") || '<tr><td colspan="6">目前沒有符合條件的喜餅紀錄。</td></tr>';
+
+  document.getElementById("cakesBody").innerHTML = list.map(r => {
+    const sent = (r.cakeStatus || "未發送") === "已發送";
+    return `<tr>
+      <td>${escapeHTML(r.date ? new Date(r.date).toLocaleString("zh-TW") : "")}</td>
+      <td>${escapeHTML(r.name)}</td>
+      <td>${escapeHTML(r.side)}</td>
+      <td>${escapeHTML(r.registerArea)}</td>
+      <td>需要</td>
+      <td>${sent ? '<span class="tag">已發送</span>' : '<span class="tag">未發送</span>'}</td>
+      <td><button class="${sent ? "secondary" : ""}" onclick="setCakeSent('${escapeHTML(r.serial)}',${!sent})">${sent ? "改為未發送" : "標記已發送"}</button></td>
+    </tr>`;
+  }).join("") || '<tr><td colspan="7">目前沒有符合條件的喜餅紀錄。</td></tr>';
 }
 function renderAll() {
-  document.getElementById("guestCount").textContent = allGuests().length;
-  document.getElementById("recordCount").textContent = records.length;
-  document.getElementById("totalAmount").textContent = "$"+
-    records.reduce((sum,r)=>sum+Number(r.amount||0),0).toLocaleString("zh-TW");
-  document.getElementById("cakeCount").textContent =
-    Object.values(getCakeSent()).filter(Boolean).length;
+  const areaGuests = guests.filter(g => g.side === activeArea);
+  const areaRecords = records.filter(r => r.registerArea === activeArea);
+  const areaCakeCount = records.filter(r =>
+    r.registerArea === activeArea && r.cake && r.cakeStatus === "已發送"
+  ).length;
+
+  document.getElementById("guestCount").textContent = areaGuests.length;
+  document.getElementById("recordCount").textContent = areaRecords.length;
+  document.getElementById("totalAmount").textContent = "$" +
+    areaRecords.reduce((sum, r) => sum + Number(r.amount || 0), 0).toLocaleString("zh-TW");
+  document.getElementById("cakeCount").textContent = areaCakeCount;
+
   renderRecords();
   renderCakes();
 }
-function downloadFile(filename,content,type) {
-  const blob = new Blob(["\uFEFF"+content],{type:type||"text/plain;charset=utf-8"});
+function downloadFile(filename, content, type) {
+  const blob = new Blob(["\uFEFF" + content], {type:type || "text/plain;charset=utf-8"});
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
-  a.href = url;a.download = filename;a.click();
-  URL.revokeObjectURL(url);
+  a.href = url;
+  a.download = filename;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 function csvCell(value) {
-  return '"'+String(value??"").replace(/"/g,'""')+'"';
+  return '"' + String(value ?? "").replace(/"/g, '""') + '"';
 }
 function exportRecords() {
-  const rows = [["登記時間","編號","姓名","分類","收禮區","金額","喜餅需求","備註"],
-    ...records.map(r=>[new Date(r.date).toLocaleString("zh-TW"),r.serial,r.name,r.side,
-      r.registerArea,r.amount,r.cake?"需要":"不需要",r.note||""])];
-  downloadFile("婚禮禮金紀錄.csv",rows.map(r=>r.map(csvCell).join(",")).join("\r\n"),"text/csv;charset=utf-8");
+  const rows = [[
+    "登記時間", "編號", "姓名", "分類", "收禮區",
+    "金額", "喜餅需求", "喜餅發送狀態", "備註"
+  ], ...records.map(r => [
+    r.date ? new Date(r.date).toLocaleString("zh-TW") : "",
+    r.serial, r.name, r.side, r.registerArea, r.amount,
+    r.cake ? "需要" : "不需要",
+    r.cakeStatus || (r.cake ? "未發送" : "不需要"),
+    r.note || ""
+  ])];
+
+  downloadFile("婚禮禮金紀錄.csv",
+    rows.map(r => r.map(csvCell).join(",")).join("\r\n"),
+    "text/csv;charset=utf-8");
 }
 function exportCakes() {
-  const sent = getCakeSent();
-  const rows = [["姓名","暱稱","分類","喜餅需求","發送狀態","現場新增"],
-    ...allGuests().filter(g=>g.cake).map(g=>[g.name,g.nickname||"",g.side,"需要",
-      sent[g.id]?"已發送":"未發送",g.manual?"是":"否"])];
-  downloadFile("婚禮喜餅紀錄.csv",rows.map(r=>r.map(csvCell).join(",")).join("\r\n"),"text/csv;charset=utf-8");
+  const rows = [[
+    "登記時間", "編號", "姓名", "分類", "收禮區", "喜餅需求", "發送狀態"
+  ], ...records.filter(r => r.cake).map(r => [
+    r.date ? new Date(r.date).toLocaleString("zh-TW") : "",
+    r.serial, r.name, r.side, r.registerArea, "需要",
+    r.cakeStatus || "未發送"
+  ])];
+
+  downloadFile("婚禮喜餅紀錄.csv",
+    rows.map(r => r.map(csvCell).join(",")).join("\r\n"),
+    "text/csv;charset=utf-8");
 }
 function downloadBackup() {
-  const backup = {version:1,exportedAt:new Date().toISOString(),
-    records,manualGuests,cakeSent:getCakeSent()};
-  downloadFile("婚禮禮金備份.json",JSON.stringify(backup,null,2),"application/json;charset=utf-8");
+  const backup = {
+    version: 2,
+    exportedAt: new Date().toISOString(),
+    records,
+    manualGuests
+  };
+  downloadFile("婚禮禮金備份.json",
+    JSON.stringify(backup, null, 2),
+    "application/json;charset=utf-8");
 }
 function restoreBackup() {
   const file = document.getElementById("restoreFile").files[0];
-  if(!file) { alert("請先選擇 JSON 備份檔。");return; }
+  if (!file) {
+    alert("請先選擇 JSON 備份檔。");
+    return;
+  }
+
   const reader = new FileReader();
   reader.onload = () => {
     try {
       const backup = JSON.parse(reader.result);
-      if(!backup || !Array.isArray(backup.records) || !Array.isArray(backup.manualGuests))
+      if (!backup || !Array.isArray(backup.records) || !Array.isArray(backup.manualGuests)) {
         throw new Error("檔案格式不正確");
-      if(!confirm("還原會取代目前瀏覽器的紀錄、手動新增賓客及喜餅狀態，確定繼續嗎？")) return;
+      }
+      if (!confirm("還原會取代目前瀏覽器的紀錄及現場新增賓客，確定繼續嗎？")) return;
+
       records = backup.records;
       manualGuests = backup.manualGuests;
-      localStorage.setItem(CAKE_KEY,JSON.stringify(backup.cakeSent||{}));
-      saveLocal();renderGuestOptions();renderAll();
-      alert("還原完成。Google 試算表正式名單不會被覆蓋。");
-    } catch(e) { alert("還原失敗："+e.message); }
+      saveLocal();
+      renderGuestOptions();
+      renderAll();
+      alert("本機備份還原完成。若要以 Google 試算表資料為準，請按「同步禮金及喜餅紀錄」。");
+    } catch (e) {
+      alert("還原失敗：" + e.message);
+    }
   };
   reader.readAsText(file);
 }
