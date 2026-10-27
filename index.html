@@ -324,6 +324,22 @@ function escapeHTML(value) {
     "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
   })[c]);
 }
+
+/* 共用跨區檢查：賓客分類必須與目前登入收禮區相同 */
+function isGuestInActiveArea(guest) {
+  return !!guest && !!activeArea && guest.side === activeArea;
+}
+function showAreaMismatch(guest) {
+  const info = document.getElementById("guestInfo");
+  info.classList.remove("hidden");
+  info.className = "status error";
+  info.textContent =
+    "⛔ 跨區登記禁止！此賓客屬於「" + guest.side +
+    "」，目前登入的是「" + activeArea +
+    "收禮區」，不能登記。請賓客致「" + guest.side +
+    "收禮區」。";
+}
+
 function login() {
   activeArea = document.getElementById("areaSelect").value;
   document.getElementById("loginPanel").classList.add("hidden");
@@ -450,13 +466,24 @@ function showCakeReminder(guest) {
 function showGuestInfo() {
   const guest = findGuest(document.getElementById("guestSelect").value);
   const info = document.getElementById("guestInfo");
+
   if(!guest) {
     info.classList.add("hidden");
     clearCakeReminder();
     selectedManualGuest = null;
     return;
   }
+
   selectedManualGuest = null;
+
+  /* 選到不同方別時，立即顯示紅色警告 */
+  if(!isGuestInActiveArea(guest)) {
+    clearCakeReminder();
+    showAreaMismatch(guest);
+    return;
+  }
+
+  info.className = "status info";
   info.classList.remove("hidden");
   info.textContent = "姓名："+guest.name+"｜分類："+guest.side+
     (guest.manual?"｜現場新增":"");
@@ -482,9 +509,12 @@ function useManualGuest() {
     showGuestInfo();
     return;
   }
+
+  /* 手動新增也必須符合目前登入的收禮區 */
   if(side !== activeArea) {
-    alert("此賓客分類為「"+side+"」，目前是「"+activeArea+
-      "收禮區」。請切換到正確收禮區，不能跨區登記。");
+    alert("⛔ 跨區登記禁止！你目前在「"+activeArea+
+      "收禮區」，不能新增分類為「"+side+
+      "」的賓客。請切換到正確收禮區再操作。");
     return;
   }
 
@@ -496,6 +526,7 @@ function useManualGuest() {
   selectedManualGuest = guest;
 
   document.getElementById("guestSelect").value = "";
+  document.getElementById("guestInfo").className = "status info";
   document.getElementById("guestInfo").classList.remove("hidden");
   document.getElementById("guestInfo").textContent =
     "已選擇現場新增賓客："+name+"｜分類："+side+"｜現場新增";
@@ -513,10 +544,16 @@ function registerGift() {
   const message = document.getElementById("registerMessage");
 
   if(!guest) { alert("請先選擇賓客，或使用手動新增。"); return; }
-  if(guest.side !== activeArea) {
-    alert("賓客分類與目前收禮區不同，不能跨區登記。");
+
+  /* 最後一道防線：不論如何選取，都禁止跨區登記 */
+  if(!isGuestInActiveArea(guest)) {
+    showAreaMismatch(guest);
+    alert("⛔ 登記失敗！目前是「"+activeArea+
+      "收禮區」，只能登記「"+activeArea+
+      "」賓客，不能登記「"+guest.side+"」賓客。");
     return;
   }
+
   if(amountText === "" || !Number.isFinite(amount) || amount < 0) {
     alert("請輸入有效的禮金金額。");
     return;
