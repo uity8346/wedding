@@ -244,6 +244,70 @@ function readJSON(key, fallback) {
     return value === null ? fallback : value;
   } catch(e) { return fallback; }
 }
+
+/* 新增：統一處理日期格式，避免顯示 Invalid Date */
+function formatDate(value) {
+  if (value === null || value === undefined || value === "") {
+    return "";
+  }
+
+  if (value instanceof Date) {
+    return Number.isNaN(value.getTime())
+      ? ""
+      : value.toLocaleString("zh-TW");
+  }
+
+  if (typeof value === "number") {
+    const date = new Date(value);
+    return Number.isNaN(date.getTime())
+      ? ""
+      : date.toLocaleString("zh-TW");
+  }
+
+  const text = String(value).trim();
+
+  if (!text) return "";
+
+  // 處理 Google 試算表常見日期格式：
+  // 2026/10/28 上午 11:20:00
+  // 2026/10/28 下午 3:20:00
+  // 2026-10-28 11:20:00
+  const match = text.match(
+    /^(\d{4})[\/-](\d{1,2})[\/-](\d{1,2})(?:\s*(上午|下午)?\s*(\d{1,2}):(\d{2})(?::(\d{2}))?)?$/
+  );
+
+  if (match) {
+    const year = Number(match[1]);
+    const month = Number(match[2]);
+    const day = Number(match[3]);
+    let hour = match[5] === undefined ? 0 : Number(match[5]);
+    const minute = match[6] === undefined ? 0 : Number(match[6]);
+    const second = match[7] === undefined ? 0 : Number(match[7]);
+
+    if (match[4] === "下午" && hour < 12) hour += 12;
+    if (match[4] === "上午" && hour === 12) hour = 0;
+
+    const date = new Date(year, month - 1, day, hour, minute, second);
+
+    if (
+      date.getFullYear() !== year ||
+      date.getMonth() !== month - 1 ||
+      date.getDate() !== day
+    ) {
+      return text;
+    }
+
+    return date.toLocaleString("zh-TW");
+  }
+
+  // 處理 ISO 日期字串，例如 2026-10-28T11:20:00.000Z
+  const date = new Date(text);
+
+  return Number.isNaN(date.getTime())
+    ? text
+    : date.toLocaleString("zh-TW");
+}
+
 function saveLocal() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
   localStorage.setItem(MANUAL_KEY, JSON.stringify(manualGuests));
@@ -618,7 +682,7 @@ function renderRecords() {
 
   document.getElementById("recordsBody").innerHTML = list.map(r => `
     <tr>
-      <td>${escapeHTML(r.date ? new Date(r.date).toLocaleString("zh-TW") : "")}</td>
+      <td>${escapeHTML(formatDate(r.date))}</td>
       <td>${escapeHTML(r.name)}</td>
       <td>${escapeHTML(r.side)}</td>
       <td>${escapeHTML(r.registerArea)}</td>
@@ -675,7 +739,7 @@ function renderCakes() {
   document.getElementById("cakesBody").innerHTML = list.map(r => {
     const sent = (r.cakeStatus || "未發送") === "已發送";
     return `<tr>
-      <td>${escapeHTML(r.date ? new Date(r.date).toLocaleString("zh-TW") : "")}</td>
+      <td>${escapeHTML(formatDate(r.date))}</td>
       <td>${escapeHTML(r.name)}</td>
       <td>${escapeHTML(r.side)}</td>
       <td>${escapeHTML(r.registerArea)}</td>
